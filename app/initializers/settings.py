@@ -33,11 +33,10 @@ SQLALCHEMY_SQLITE_URI = 'sqlite:///' + 'sqlite.db'
 
 # MySQL configuration
 #MYSQL_USER = 'root'
-#MYSQL_PASSWORD = 'password'
-MYSQL_USER = 'docking'
+MYSQL_USER = 'quarantine'
 #MYSQL_PRODUCTION_DB = 'app'
 #MYSQL_DEVELOPMENT_DB = 'app'
-MYSQL_DB = 'docking'
+MYSQL_DB = 'quarantine'
 
 
 
