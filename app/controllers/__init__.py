@@ -7,6 +7,7 @@ _blueprints = []
 
 
 def loadControllers(app):
+	from app.controllers import home
 	from app.controllers.api import v1
 
 	for blueprint in _blueprints:

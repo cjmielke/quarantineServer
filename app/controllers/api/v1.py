@@ -124,6 +124,7 @@ def submitResults():
 		j = Job()
 
 		#assert content['zincID'].startswith('ZINC')
+		j.user = content['user']
 		j.zincID = int(content['zincID'].replace('ZINC',''))
 		j.receptor = content['receptor']
 		j.ipAddr = int(ip)
