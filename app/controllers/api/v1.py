@@ -41,7 +41,8 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 # tranches defined in this case by individual compressed pdbqt.gz files
 tranches = [
 	'BAAAML.xaa.pdbqt.gz',
-	'BBAAML.xaa.pdbqt.gz'
+	'BBAAML.xaa.pdbqt.gz',
+	'BCAAML.xaa.pdbqt.gz'
 ]
 
 class Tranche():
@@ -94,9 +95,11 @@ def getTrancheJob(tranche):
 	'''
 	nm = assigner.nextModel(tranche)
 
-	receptors = ['spike-1', 'mpro-1']				# hardcoded for now - future versions of API will assess what's needed from database
+	#receptors = ['spike-1', 'mpro-1']				# hardcoded for now - future versions of API will assess what's needed from database
+	receptors = ['mpro-1']
 
 	return jsonify(**dict(ligand=nm, receptors=receptors))
+
 
 
 from ipaddress import ip_address
@@ -120,10 +123,22 @@ def submitResults():
 
 		j = Job()
 
-		assert content['zincID'].startswith('ZINC')
+		#assert content['zincID'].startswith('ZINC')
 		j.zincID = int(content['zincID'].replace('ZINC',''))
+		j.receptor = content['receptor']
+		j.ipAddr = int(ip)
 		j.bestDG = float(content['bestDG'])
-		j.bestKi = float(content['bestKi'])
+
+		bestKi = content.get('bestKi', None)
+		if bestKi is not None: bestKi=float(bestKi)
+		j.bestKi = bestKi
+
+		algo = content['algo']
+		assert algo in ['AD4', 'AD-gpu', 'AD-vina']
+		j.algo = algo
+
+		j.time = int(content['time'])
+
 
 		if 'test' not in content:
 			db.session.add(j)
