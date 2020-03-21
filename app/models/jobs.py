@@ -9,6 +9,7 @@ class Job(db.Model):
 	__tablename__ = 'jobs'
 
 	id = db.Column('jobID', db.Integer, primary_key = True)
+
 	user = db.Column('user', db.String(16))
 
 	zincID = db.Column('zincID', db.Integer)
