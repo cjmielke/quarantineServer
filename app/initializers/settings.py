@@ -35,7 +35,6 @@ SQLALCHEMY_SQLITE_URI = 'sqlite:///' + 'sqlite.db'
 #MYSQL_USER = 'root'
 #MYSQL_PASSWORD = 'password'
 MYSQL_USER = 'docking'
-from secrets import MYSQL_PASSWORD
 #MYSQL_PRODUCTION_DB = 'app'
 #MYSQL_DEVELOPMENT_DB = 'app'
 MYSQL_DB = 'docking'
