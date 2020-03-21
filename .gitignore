@@ -3,3 +3,5 @@ secrets.*
 *.pyc
 dataprod.db
 .idea
+venv
+sqlite.db
