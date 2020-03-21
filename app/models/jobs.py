@@ -15,7 +15,7 @@ class Job(db.Model):
 	receptor = db.Column('receptor', db.String(16))
 	ipAddr = db.Column('ip', db.Integer)
 
-	bestDG = db.Column('bestDG', db.Float)
+	bestDG = db.Column('bestDG', db.Float, index=True)
 	bestKi = db.Column('bestKi', db.Float)
 
 	algo = db.Column('algo', db.String(12))		# AD, AD-gpu, AD-vina
