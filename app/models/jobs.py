@@ -14,18 +14,14 @@ class Job(db.Model):
 	receptor = db.Column('receptor', db.String(16))
 	ipAddr = db.Column('ip', db.Integer)
 
-	bestDG = db.Column('bestDF', db.Float)
+	bestDG = db.Column('bestDG', db.Float)
 	bestKi = db.Column('bestKi', db.Float)
 
 	algo = db.Column('algo', db.String(12))		# AD, AD-gpu, AD-vina
 
 	time = db.Column('time', db.Integer)
 
-
 	timestamp = db.Column('timestamp', db.DateTime, default=datetime.datetime.utcnow)
-
-	dob = db.Column(db.DateTime)
-
 
 
 def getJob(id):

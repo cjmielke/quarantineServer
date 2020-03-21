@@ -1,7 +1,6 @@
 import os
 from os.path import join
 
-from secrets import SECRET_KEY, MYSQL_PASSWORD
 
 # I use this to make development easy - better ways to do this
 import socket

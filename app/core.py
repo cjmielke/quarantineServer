@@ -6,7 +6,7 @@ from flask import Flask
 from pyjade.ext.jinja import PyJadeExtension
 
 # from app.auth import loginManagerSetup
-import app.initializers.secrets
+
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
@@ -39,7 +39,8 @@ def create_app(debug):
 	if debug:
 		db_uri = settings.SQLALCHEMY_SQLITE_URI
 	else:				# for production
-		db_uri = 'mysql://%s:%s@localhost/%s' % (settings.MYSQL_USER, settings.MYSQL_PASSWORD, settings.MYSQL_DB)
+		from app.initializers import secrets
+		db_uri = 'mysql://%s:%s@localhost/%s' % (settings.MYSQL_USER, secrets.MYSQL_PASSWORD, settings.MYSQL_DB)
 
 	app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 	#app.secret_key = SECRET_KEY  # move this out of here eventually

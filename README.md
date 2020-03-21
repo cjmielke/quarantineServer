@@ -17,3 +17,26 @@ To run :
 * define indexes for sql schema
 
 * create a docker-compose file to orchestrate this along with a containerized mysql, as well as a sentry server for remote error collection
+
+
+
+##### Running in developer mode locally
+
+    python2.7 runserver.py
+
+
+##### Running in production
+
+
+
+for production use, you must install the relevant mysql libraries
+
+    sudo apt-get install libmysqlclient-dev
+    pip2.7 install mysqlclient
+
+then create a secrets.py file in app/initializers/secrets.py with the relevant
+MYSQL_PASSWORD = 'password'
+
+To run the server, pass the production flag
+
+    python2.7 runserver.py -production
