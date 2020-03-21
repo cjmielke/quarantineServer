@@ -17,7 +17,7 @@ def main():
 	host='127.0.0.1'   # host of 0.0.0.0 makes debug server visible over network! Use sparingly
 
 	if args.debug: host='0.0.0.0'
-	app.run(host=host, debug=app.debug, port=5001, threaded=True)
+	app.run(host=host, debug=app.debug, port=1313, threaded=True)
 
 if __name__ == "__main__":
 	main()
