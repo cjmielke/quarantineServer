@@ -1,0 +1,5 @@
+app/initializers/secrets.*
+secrets.*
+*.pyc
+dataprod.db
+.idea
