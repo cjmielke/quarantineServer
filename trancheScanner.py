@@ -70,6 +70,8 @@ def scan():
 				t.pH = fileName[4]
 				t.charge = fileName[5]
 
+				t.subset = '3D'			# "all"
+
 				print t
 				db.session.add(t)
 			db.session.commit()	# faster out of loop
