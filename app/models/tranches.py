@@ -10,7 +10,7 @@ class Tranche(db.Model):
 
 	id = db.Column('trancheID', db.Integer, primary_key = True)
 	urlPath = db.Column('urlPath', db.String(128), unique = True, index=True)			# full path on files.docking.org where pdbqt is found
-	fileName = db.Column('fileName', db.String(16), unique = True, index=True)			# full path on files.docking.org where pdbqt is found
+	fileName = db.Column('fileName', db.String(32), unique = True, index=True)			# full path on files.docking.org where pdbqt is found
 
 	lastAssigned = db.Column('lastAssigned', db.Integer, index=True)
 
