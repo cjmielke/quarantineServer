@@ -73,6 +73,7 @@ def create_app(debug):
 			j = Job()
 			j.user = 'testUser'
 			j.bestDG = -7
+			j.zincID = 10
 
 			db.session.add(j)
 			db.session.commit()

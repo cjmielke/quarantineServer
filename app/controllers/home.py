@@ -22,13 +22,20 @@ def index():
 	#return jsonify(**response)
 	print 'columns :', rows.keys()
 
-	results = [(
-		r.jobID,
-		r.user,
-		r.zincID,
-		r.receptor,
-		r.bestDG
-	) for r in rows]
+	results = []
+	for r in rows:
+		user = r.user or ''
+		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
+
+		results.append((
+			r.jobID,
+			user,
+			#zinc,
+			"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zinc, zinc),
+			r.receptor,
+			r.bestDG
+		))
+
 
 
 	#result = db.engine.execute(sql, user=user)
