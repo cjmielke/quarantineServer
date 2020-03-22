@@ -26,8 +26,8 @@ class Job(db.Model):
 
 	id = db.Column('jobID', db.Integer, primary_key = True)
 	#user = db.Column('user', db.String(16))
-	user = db.Column('user', db.ForeignKey('users.user'), nullable=True, index=True)
-	#userID = db.Column('user', db.Integer)
+	#user = db.Column('user', db.ForeignKey('users.user'), nullable=True, index=True)
+	userID = db.Column('user', db.Integer, nullable=True, index=True)
 
 	zincID = db.Column('zincID', db.Integer)
 	receptor = db.Column('receptor', db.String(16))
