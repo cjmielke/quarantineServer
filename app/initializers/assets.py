@@ -12,7 +12,7 @@ assets are stripped but the basic mechanism remains for later
 # consolidated css bundle
 css_bundle = Bundle(
 	'css/style.css',
-	'css/dc.css',
+	#'css/dc.css',
 
 	filters='cssmin', output='css/main.min.css')
 

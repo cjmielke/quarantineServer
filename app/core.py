@@ -67,6 +67,15 @@ def create_app(debug):
 	with app.app_context():
 		db.create_all()
 
+		if debug:
+			from models.jobs import Job
+
+			j = Job()
+			j.user = 'testUser'
+			j.bestDG = -7
+
+			db.session.add(j)
+			db.session.commit()
 
 
 
