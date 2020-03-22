@@ -42,7 +42,7 @@ def scan():
 
 	from app.core import create_app
 
-	app = create_app(debug=True)
+	app = create_app(debug=debug)
 
 	with app.app_context():
 		db.create_all()
