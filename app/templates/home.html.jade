@@ -1,0 +1,48 @@
+extends base.html.jade
+
+block title
+	title Quarantine@Home
+
+block content
+
+	br
+	br
+	br
+
+	.body-wrapper
+		.container
+			.row
+				h4 Best hits across all models
+
+				table.table
+					thead
+						tr
+							th(scope='col') JobID
+							th(scope='col') Username
+							th(scope='col') Ligand
+							th(scope='col') Receptor
+							th(scope='col') Binding Energy
+					tbody
+						- for r in results
+							tr
+								- for c in r
+									td {{c}}
+
+			.row
+				.col-sm-6.col-md-6.col.lg-6
+					center
+						h1 test
+
+
+				.col-sm-6.col-md-6.col.lg-6
+					.title-block.clearfix
+						h2 Quarantine@Home
+						img(src='/static/img/logo/guylogo.png',style='height:170px;float:right')
+
+
+
+
+
+		.space-sep
+		.space-sep
+
