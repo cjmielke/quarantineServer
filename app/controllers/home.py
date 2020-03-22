@@ -12,6 +12,7 @@ bp = Blueprint('home', __name__, url_prefix='/')
 def index():
 
 	query = text('''SELECT * FROM jobs
+		LEFT JOIN users USING(user)
 		order by bestDG
 		LIMIT 50;'''
 	)
@@ -24,7 +25,8 @@ def index():
 
 	results = []
 	for r in rows:
-		user = r.user or ''
+		print r
+		user = r.username or ''
 		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
 
 		results.append((
@@ -42,6 +44,9 @@ def index():
 	#steps = [{'date': r.date.isoformat(), 'steps':r.steps} for r in result]
 
 	return render_template('home.html.jade', results=results)
+
+
+
 
 
 '''

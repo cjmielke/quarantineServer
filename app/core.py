@@ -10,6 +10,7 @@ from pyjade.ext.jinja import PyJadeExtension
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
+from app.models.jobs import testModels
 
 app = Flask('quarantine', static_folder=settings.STATIC_FOLDER, template_folder=settings.TEMPLATE_FOLDER)
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
@@ -68,16 +69,7 @@ def create_app(debug):
 		db.create_all()
 
 		if debug:
-			from models.jobs import Job
-
-			j = Job()
-			j.user = 'testUser'
-			j.bestDG = -7
-			j.zincID = 10
-
-			db.session.add(j)
-			db.session.commit()
-
+			testModels()
 
 
 

@@ -10,9 +10,7 @@ from app.models import db
 #from app.controllers.api import bp
 bp = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
-from app.models.jobs import Job
-
-
+from app.models.jobs import Job, User
 
 
 # FIXME - Make a homepage later .... with a table of best results
@@ -121,10 +119,19 @@ def submitResults():
 		ip = ip_address(unicode(request.remote_addr))
 		print ip, int(ip)
 
+		userName = content['user']
+
+		user = User.query.filter(User.username == userName).first()
+		if not user:
+			user = User()
+			user.username = userName
+			db.session.add(user)
+			db.session.commit()
+
 		j = Job()
 
 		#assert content['zincID'].startswith('ZINC')
-		j.user = content['user']
+		j.user = user.user
 		j.zincID = int(content['zincID'].replace('ZINC',''))
 		j.receptor = content['receptor']
 		j.ipAddr = int(ip)
