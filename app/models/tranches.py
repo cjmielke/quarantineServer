@@ -14,6 +14,7 @@ class Tranche(db.Model):
 	fileName = db.Column('fileName', db.String(32), unique = True, index=True)			# full path on files.docking.org where pdbqt is found
 	subset = db.Column('subset', db.String(16), index=True)			# full path on files.docking.org where pdbqt is found
 
+
 	lastAssigned = db.Column('lastAssigned', db.Integer, index=True)
 
 	# will be unknown by default until either server parses it or a user reports back
