@@ -27,7 +27,7 @@ class Job(db.Model):
 	id = db.Column('jobID', db.Integer, primary_key = True)
 	#user = db.Column('user', db.String(16))
 	#user = db.Column('user', db.ForeignKey('users.user'), nullable=True, index=True)
-	userID = db.Column('user', db.Integer, nullable=True, index=True)
+	user = db.Column('user', db.Integer, index=True)
 
 	zincID = db.Column('zincID', db.Integer)
 	receptor = db.Column('receptor', db.String(16))
@@ -50,15 +50,18 @@ def getJob(id):
 
 def testModels():
 
+	test_user = 'testUser'
 
-
-	u = User()
-	u.username = 'testUser'
-	db.session.add(u)
-	db.session.commit()
+	user = User.query.filter(User.username == test_user).first()
+	print user
+	if not user:
+		user = User()
+		user.username = test_user
+		db.session.add(user)
+		db.session.commit()
 
 	j = Job()
-	j.user = u.user
+	j.user = user.user
 	j.bestDG = -7
 	j.zincID = 10
 
