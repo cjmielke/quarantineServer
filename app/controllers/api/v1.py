@@ -133,6 +133,14 @@ def getTrancheJob(trancheID):
 
 	return jsonify(**dict(ligand=tranche.lastAssigned, receptors=receptors))
 
+@bp.route('/tranches/<int:trancheID>/out')
+def TrancheEOF(trancheID):
+	tranche = getTranche(trancheID)
+	print tranche.lastAssigned
+	tranche.lastAssigned -= 1
+	tranche.loopCount += 1
+	db.session.commit()
+	return jsonify(**dict(status='ok'))
 
 
 from ipaddress import ip_address
