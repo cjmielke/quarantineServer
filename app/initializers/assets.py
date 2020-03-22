@@ -53,7 +53,8 @@ def init_assets(app):
 	js_bundle = Bundle(
 		#lib_js_bundle,
 		coffee_bundle,
-		filters='yui_js', output='js/main.min.js')
+		#filters='yui_js',
+		output='js/main.min.js')
 
 
 
