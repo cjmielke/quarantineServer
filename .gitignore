@@ -5,3 +5,6 @@ dataprod.db
 .idea
 venv
 sqlite.db
+ZINC-downloader-3D-pdbqt.gz.uri
+app/static/.webassets-cache/
+app/static/js/coffee.js

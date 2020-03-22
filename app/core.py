@@ -72,5 +72,5 @@ def create_app(debug):
 			testModels()
 
 
-
+	return app
 

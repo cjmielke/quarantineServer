@@ -9,16 +9,6 @@ class User(db.Model):
 	user = db.Column('user', db.Integer, primary_key = True)
 	username = db.Column('username', db.String(16))
 
-'''
-DB=db
-class EntityModel(DB.Model):
-	id = DB.Column(DB.Unicode(37), primary_key=True)
-
-class DocumentModel(DB.Model):
-	id = DB.Column(DB.Unicode(37), primary_key=True)
-	entity_id = DB.Column(DB.Unicode(37), DB.ForeignKey('entity.id',   ondelete='cascade'), nullable=True)
-	entity = DB.relationship('EntityModel')
-'''
 
 class Job(db.Model):
 
