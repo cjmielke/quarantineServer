@@ -19,6 +19,9 @@ class Job(db.Model):
 	#user = db.Column('user', db.ForeignKey('users.user'), nullable=True, index=True)
 	user = db.Column('user', db.Integer, index=True)
 
+	trancheID = db.Column('trancheID', db.Integer)
+	trancheLigand = db.Column('trancheLigand', db.Integer)
+
 	zincID = db.Column('zincID', db.Integer)
 	receptor = db.Column('receptor', db.String(16))
 	ipAddr = db.Column('ip', db.Integer)

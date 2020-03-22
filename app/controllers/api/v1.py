@@ -3,11 +3,14 @@ from __future__ import unicode_literals
 import random
 
 from flask import Blueprint, render_template, request, jsonify
+from sqlalchemy import text
 
 from app.controllers import add_blueprint
 from app.models import db
 
 #from app.controllers.api import bp
+from app.models.tranches import getTranche
+
 bp = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
 from app.models.jobs import Job, User
@@ -33,8 +36,6 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 	The sixth and last dimension is net molecular charge. Here we follow the convention of InChIkeys. Thus. N = neutral, M = minus 1, L = minus 2 (or greater). O = plus 1, P = plus 2 (or greater).
 
 '''
-
-
 
 # tranches defined in this case by individual compressed pdbqt.gz files
 tranches = [
@@ -75,28 +76,62 @@ assigner = TrancheModels()			# single object shared among all threads
 
 
 @bp.route('/tranche/get')
-def getTranche():
+def assignTranche():
 	'''
 	Picks a random tranche file, and reports back to client
 	Client will then download this file, and for the duration of its runtime process ligands from it until exhaustion
 	This minimizes bandwidth usage on the ZINC server, or any mirrors that may be created
 	'''
 	rt = random.choice(tranches)
-	return jsonify(**dict(tranche=rt))
+
+	#'ABCDEFGHIJK'
+	weights = "'A','B','C','D','E','F','G','H','I','J','K'"
+	logPs = "'A','B','C','D','E','F','G','H','I','J','K'"
+
+	'''
+	The third letter is reactivity : A=anodyne. B=Bother (e.g. chromophores) C=clean (but pains ok), E=mild reactivity ok, G=reactive ok, I = hot chemistry ok
+	The fourth letter is purchasability: A and B = in stock, C = in stock via agent, D = make on demand, E = boutique (expensive), F=annotated (not for sale)
+	The fifth letter is pH range: R = ref (7.4), M = mid (near 7.4), L = low (around 6.4), H=high (around 8.4).
+	The sixth and last dimension is net molecular charge. Here we follow the convention of InChIkeys. Thus. N = neutral, M = minus 1, L = minus 2 (or greater). O = plus 1, P = plus 2 (or greater).
+	'''
+
+	reactivity = 'ABCEGI'
+	purch = 'ABCDEF'
+
+	query = text('''
+		SELECT * from tranches
+		WHERE weight in ('A','B','C','D','E','F','G','H','I','J','K')
+		AND logP in ('A')
+		AND purchasibility in ('A','B')
+		AND pH in ('R','M')
+		AND charge in ('N','M','O');
+	''')
+
+	rows = db.engine.execute(query)
+	rows = [r for r in rows]
+	print 'tranches selected : ', len(rows)
+	selection = random.choice(rows)
+
+	return jsonify(**dict(tranche=selection.urlPath, id=selection.trancheID))
 
 
-@bp.route('/tranches/<tranche>/nextligand')
-def getTrancheJob(tranche):
+@bp.route('/tranches/<int:trancheID>/nextligand')
+def getTrancheJob(trancheID):
 	'''
 	Get the most recent model number assigned for this tranche, and increment it. Assign this to the client
 	the client will then spool through the tranche file looking for this model number, and take the next one
 	'''
-	nm = assigner.nextModel(tranche)
+	#nm = assigner.nextModel(tranche)
 
+	tranche = getTranche(trancheID)
+	print tranche.lastAssigned
+	tranche.lastAssigned += 1
+
+	db.session.commit()
 	#receptors = ['spike-1', 'mpro-1']				# hardcoded for now - future versions of API will assess what's needed from database
 	receptors = ['mpro-1']
 
-	return jsonify(**dict(ligand=nm, receptors=receptors))
+	return jsonify(**dict(ligand=tranche.lastAssigned, receptors=receptors))
 
 
 
@@ -132,6 +167,10 @@ def submitResults():
 
 		#assert content['zincID'].startswith('ZINC')
 		j.user = user.user
+
+		j.trancheID = int(content['tranche'])
+		j.trancheLigand = int(content['ligand'])
+
 		j.zincID = int(content['zincID'].replace('ZINC',''))
 		j.receptor = content['receptor']
 		j.ipAddr = int(ip)

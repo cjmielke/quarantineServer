@@ -32,6 +32,13 @@ class Tranche(db.Model):
 	charge = db.Column('charge', db.String(1), index=True)
 
 
+def getTranche(id):
+	# type: (int) -> Tranche
+	tranche = Tranche.query.get(int(id))
+	return tranche
+
+
+
 def testModels():
 
 	db.session.commit()
