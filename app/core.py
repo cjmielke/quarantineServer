@@ -5,12 +5,12 @@ from flask import Flask
 # from flask_cache import Cache
 from pyjade.ext.jinja import PyJadeExtension
 
-# from app.auth import loginManagerSetup
-
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
 from app.models.jobs import testModels
+
+# from app.auth import loginManagerSetup
 
 app = Flask('quarantine', static_folder=settings.STATIC_FOLDER, template_folder=settings.TEMPLATE_FOLDER)
 app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
@@ -70,7 +70,6 @@ def create_app(debug):
 
 		if debug:
 			testModels()
-
 
 	return app
 

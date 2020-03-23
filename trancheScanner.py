@@ -1,8 +1,12 @@
 #!/usr/bin/python2.7
 import argparse
+import os
 
+from sqlalchemy import text
+
+from app.initializers.settings import LOCAL_ZINC
 from app.models import db
-from app.models.tranches import Tranche
+from app.models.tranches import Tranche, getTranche
 
 '''
 
@@ -15,6 +19,8 @@ This script scans a list of tranche URLs and populates the database tranche tabl
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-production', action='store_true')
+parser.add_argument('-scan', action='store_true')
+parser.add_argument('-load', action='store_true')
 args = parser.parse_args()
 
 debug = True
@@ -37,7 +43,7 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 
 #@click.command(name='db-init-data')
 #@with_appcontext
-def scan():
+def loadTranches():
 	"""Init db with some data"""
 
 	from app.core import create_app
@@ -77,6 +83,40 @@ def scan():
 			db.session.commit()	# faster out of loop
 
 
+
+
+def findLocalTranches():
+	from app.core import create_app
+
+	app = create_app(debug=debug)
+
+	with app.app_context():
+
+		print 'looking for cached ligand tranches'
+		query = text('''
+			SELECT * from tranches
+		''')
+		rows = db.engine.execute(query)
+		# rows = [r for r in rows]
+
+		for row in rows:
+			print row.urlPath
+			localPath = os.path.join(LOCAL_ZINC, row.urlPath)
+			if os.path.exists(localPath):
+				print 'Found! ', localPath
+				# row.local = 1
+				# fucking sqlAlchemy ...
+				# db.engine.execute(Tranche.update().where(Tranche.id == <id>).values(foo="bar"))
+				tranche = getTranche(row.trancheID)
+				tranche.local = 1
+
+		db.session.commit()
+
+
 if __name__ == "__main__":
-	scan()
+	if args.load:
+		loadTranches()
+
+	if args.scan:
+		findLocalTranches()
 

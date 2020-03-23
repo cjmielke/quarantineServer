@@ -39,6 +39,7 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 
 '''
 
+'''
 # tranches defined in this case by individual compressed pdbqt.gz files
 tranches = [
 	'BAAAML.xaa.pdbqt.gz',
@@ -74,6 +75,8 @@ class TrancheModels():
 
 
 assigner = TrancheModels()			# single object shared among all threads
+'''
+
 
 
 
@@ -84,7 +87,7 @@ def assignTranche():
 	Client will then download this file, and for the duration of its runtime process ligands from it until exhaustion
 	This minimizes bandwidth usage on the ZINC server, or any mirrors that may be created
 	'''
-	rt = random.choice(tranches)
+	#rt = random.choice(tranches)
 
 	#'ABCDEFGHIJK'
 	weights = "'A','B','C','D','E','F','G','H','I','J','K'"
