@@ -6,6 +6,7 @@ from flask import Blueprint, render_template, request, jsonify
 from sqlalchemy import text
 
 from app.controllers import add_blueprint
+from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS
 from app.models import db
 
 #from app.controllers.api import bp
@@ -129,7 +130,8 @@ def getTrancheJob(trancheID):
 
 	db.session.commit()
 	#receptors = ['spike-1', 'mpro-1']				# hardcoded for now - future versions of API will assess what's needed from database
-	receptors = ['mpro-1']
+	#receptors = ['mpro-1']
+	receptors = LIVE_RECEPTORS
 
 	return jsonify(**dict(ligand=tranche.lastAssigned, receptors=receptors))
 
@@ -180,7 +182,11 @@ def submitResults():
 		j.trancheLigand = int(content['ligand'])
 
 		j.zincID = int(content['zincID'].replace('ZINC',''))
-		j.receptor = content['receptor']
+
+		receptor = content['receptor']
+		if receptor not in ALL_RECEPTORS:
+			raise ValueError('invalid receptor reported!')
+		j.receptor = receptor
 		j.ipAddr = int(ip)
 		j.bestDG = float(content['bestDG'])
 

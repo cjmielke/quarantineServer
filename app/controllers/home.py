@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from sqlalchemy import text
 
 from app.controllers import add_blueprint
+from app.initializers.settings import ALL_RECEPTORS
 from app.models import db
 
 bp = Blueprint('home', __name__, url_prefix='/')
@@ -29,15 +30,17 @@ def index():
 		user = r.username or ''
 		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
 
+
+		if r.receptor not in ALL_RECEPTORS: continue			# defense against injection
+
 		results.append((
 			r.jobID,
 			user,
 			#zinc,
 			"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zinc, zinc),
-			r.receptor,
+			"<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (r.receptor, r.receptor),
 			r.bestDG
 		))
-
 
 
 	#result = db.engine.execute(sql, user=user)
