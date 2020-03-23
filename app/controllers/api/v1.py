@@ -1,12 +1,13 @@
 from __future__ import unicode_literals
 
+import os
 import random
 
 from flask import Blueprint, render_template, request, jsonify
 from sqlalchemy import text
 
 from app.controllers import add_blueprint
-from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS
+from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS, LOCAL_ZINC
 from app.models import db
 
 #from app.controllers.api import bp
@@ -113,7 +114,14 @@ def assignTranche():
 	print 'tranches selected : ', len(rows)
 	selection = random.choice(rows)
 
-	return jsonify(**dict(tranche=selection.urlPath, id=selection.trancheID))
+	response = dict(tranche=selection.urlPath, id=selection.trancheID)
+
+	# does the server have a local cached copy?
+	localPath = os.path.join(LOCAL_ZINC, selection.urlPath)
+	if os.path.exists(localPath):
+		response['mirror'] = 'https://quarantine.infino.me/ligands/'
+
+	return jsonify(**response)
 
 
 @bp.route('/tranches/<int:trancheID>/nextligand')

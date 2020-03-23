@@ -44,7 +44,7 @@ LIVE_RECEPTORS = ALL_RECEPTORS				# receptors currently being assigned
 
 
 
-
+LOCAL_ZINC = os.path.join(os.getcwd(), 'ZINCDB')
 
 
 
