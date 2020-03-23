@@ -13,3 +13,4 @@ webassets==2.0
 Werkzeug==1.0.0
 yuicompressor
 coffeescript
+raven[flask]
