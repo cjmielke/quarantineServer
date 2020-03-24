@@ -19,22 +19,21 @@ html
 
 		block meta
 
-			meta(name='description', content='Infinome is a citizen science experiment to help people lose weight, feel better, and live longer.')
+			meta(name='description', content='Quarantine@Home lets you donate your computer power to fight the coronavirus!')
 			meta(name="viewport",content="width=device-width, initial-scale=1.0")
 			meta(property="fb:app_id", content="{{FACEBOOK_KEY}}")
 
 		// FIXME
-		//
-			block openGraph
-				meta(property='og:title', content='Quarantine@Home')
-				meta(property='og:type', content='website')
-				meta(property='og:url', content='https://quarantine.infino.me/')
-				meta(property='og:image', content='https://www.infino.me/static/spike1.jpg')	//FIXME
-				meta(property='og:image:width', content='610')
-				meta(property='og:image:height', content='357')
-				meta(property='og:image', content='https://www.infino.me/static/spike1.jpg')
-				meta(property='og:image:width', content='200')
-				meta(property='og:image:height', content='200')
+		block openGraph
+			meta(property='og:title', content='Quarantine@Home')
+			meta(property='og:type', content='website')
+			meta(property='og:url', content='https://quarantine.infino.me/')
+			meta(property='og:image', content='https://www.infino.me/static/spike1.jpg')	//FIXME
+			meta(property='og:image:width', content='610')
+			meta(property='og:image:height', content='357')
+			meta(property='og:image', content='https://www.infino.me/static/spike1.jpg')
+			meta(property='og:image:width', content='200')
+			meta(property='og:image:height', content='200')
 
 
 		-if not DEBUG
