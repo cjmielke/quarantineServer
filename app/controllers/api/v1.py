@@ -1,13 +1,15 @@
 from __future__ import unicode_literals
 
+import json
 import os
 import random
 
 from flask import Blueprint, render_template, request, jsonify
 from sqlalchemy import text
+from werkzeug.datastructures import FileStorage
 
 from app.controllers import add_blueprint
-from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS, LOCAL_ZINC
+from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS, LOCAL_ZINC, RESULTS_STORAGE
 from app.models import db
 
 #from app.controllers.api import bp
@@ -162,20 +164,24 @@ from ipaddress import ip_address
 @bp.route('/submitresults', methods=['GET','POST'])
 def submitResults():
 
-	if request.method == 'GET':
-		return render_template('results.html.jade')
+	#if request.method == 'GET':
+	#	return render_template('results.html.jade')
 
-	elif request.method == 'POST':
+	if request.method == 'POST':
 
-		print (request.is_json)
-		content = request.get_json()
+		if request.is_json:
+			logFile = None
+			content = request.get_json()
+		else:
+			content = json.load(request.files['data'])
+
 		print (content)
 		print request.remote_addr
 
 		ip = ip_address(unicode(request.remote_addr))
 		print ip, int(ip)
 
-		userName = content['user']
+		userName = content.get('user', None)
 
 		user = User.query.filter(User.username == userName).first()
 		if not user:
@@ -215,6 +221,12 @@ def submitResults():
 		if 'test' not in content:
 			db.session.add(j)
 			db.session.commit()
+
+		if 'logfile' in request.files:
+			logFile = request.files['logfile']  # type: FileStorage
+			savePath = os.path.join(RESULTS_STORAGE, '%s.dlg.gz' % j.id)
+			logFile.save(savePath)
+
 
 		return jsonify(**{'status': 'thanks'})
 
