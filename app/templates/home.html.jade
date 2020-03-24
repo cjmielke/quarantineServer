@@ -12,11 +12,35 @@ block content
 	.body-wrapper
 		.container
 			.row
-			h4 About
-			p Quarantine@Home is a project that lets you donate your spare computer power to finding drugs to target the coronavirus!
-			p Developers :
-				a(href='https://github.com/cjmielke/quarantineAtHome' target='BLANK') source code is here
+				.col-sm-6.col-md-6.col.lg-6
+					h3 About
+					p Quarantine@Home is a project that lets you donate your spare computer power to finding drugs to target the coronavirus! We leverage the power of the
+						a(href="http://autodock.scripps.edu/wiki/AutoDock4" target="BLANK") &nbsp;Autodock&nbsp;
+						| suite of tools to perform small molecule screening against viral proteins. Possible drugs are sourced from the
+						a(href="https://zinc.docking.org/" target="BLANK") &nbsp;Zinc Database&nbsp;
+						| hosted at the University of California San Francisco
+					p Developers can access the &nbsp;
+						a(href='https://github.com/cjmielke/quarantineAtHome' target='BLANK') source code here
 
+				.col-sm-6.col-md-6.col.lg-6
+					img(src="https://www.infino.me/static/spike1.jpg", width='80%')
+			.card
+				.card-header Linux
+				.card-body
+					p Fetch code
+					code git clone https://github.com/cjmielke/quarantineAtHome && cd quarantineAtHome
+					br
+					br
+					p  With and Nvidia GPU (requires nvidia-docker2)
+					code sudo docker build -t quarantinegpu -f Dockerfile.gpu . && sudo nvidia-docker run -it -e ME=<b>anonymous</b> quarantinegpu
+					br
+					br
+					p CPU only (slower)
+					code sudo docker build -t quarantine -f Dockerfile . && sudo docker run -it -e ME=<b>anonymous</b> quarantinegpu
+
+
+
+			br
 			.row
 
 				h4 Best hits across all models
