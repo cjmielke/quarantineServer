@@ -9,7 +9,7 @@ from sqlalchemy import text
 from werkzeug.datastructures import FileStorage
 
 from app.controllers import add_blueprint
-from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS, LOCAL_ZINC, RESULTS_STORAGE
+from app.initializers.settings import LIVE_RECEPTORS, ALL_RECEPTORS, LOCAL_ZINC, RESULTS_STORAGE, DOCKING_ALGOS
 from app.models import db
 
 #from app.controllers.api import bp
@@ -179,7 +179,7 @@ def submitResults():
 		print request.remote_addr
 
 		ip = ip_address(unicode(request.remote_addr))
-		print ip, int(ip)
+		print request.files
 
 		userName = content.get('user', None)
 
@@ -212,7 +212,8 @@ def submitResults():
 		j.bestKi = bestKi
 
 		algo = content['algo']
-		assert algo in ['AD4', 'AD-gpu', 'AD-vina']
+
+		assert algo in DOCKING_ALGOS
 		j.algo = algo
 
 		j.time = int(content['time'])

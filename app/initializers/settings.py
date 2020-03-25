@@ -49,3 +49,4 @@ LOCAL_ZINC = os.path.join(os.getcwd(), 'ZINCDB')
 RESULTS_STORAGE = os.path.join(os.getcwd(), 'DLG')
 
 
+DOCKING_ALGOS = ['AD4', 'AD-gpu', 'AD-vina', 'AD-win']
