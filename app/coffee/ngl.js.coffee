@@ -95,7 +95,7 @@ loadDockingResults = (receptor, jobID) ->
 	stage = document.stage
 
 	# Code for example: interactive/annotation
-	mol='/static/receptors/mpro-1/receptor.pdbqt'
+	mol='/static/receptors/'+receptor+'/receptor.pdbqt'
 	stage.loadFile(mol).then (o) ->
 		o.addRepresentation 'cartoon', color: 'chain'
 		#o.addRepresentation 'spacefill', color: 'resname', opacity: 0.5
