@@ -106,8 +106,7 @@ def printSchema(model):
 if __name__ == "__main__":
 	#printSchema(Result)
 	printSchema(Job)
-	scanDir(db)
-
+	scanAndInsert()
 
 
 

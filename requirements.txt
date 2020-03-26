@@ -15,3 +15,4 @@ yuicompressor
 coffeescript
 raven[flask]
 numpy
+python-magic
