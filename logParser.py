@@ -35,7 +35,7 @@ import magic
 def validateLogFile(fileName):
 	gzMagic = magic.from_buffer(open(fileName).read(2048))
 	#print gzMagic
-	if gzMagic.startswith('gzip compressed data, was "dock.dlg"'):
+	if gzMagic.startswith('gzip compressed data, was'):
 		fileMagic = magic.from_buffer(gzip.open(fileName).read(2048))
 		#print fileMagic
 		if fileMagic == 'ASCII text':
@@ -94,8 +94,7 @@ def scanAndInsert():
 
 			job = getJob(jobID)
 			job.uploaded = True
-
-		#db.session.commit()
+			db.session.commit()
 
 
 
