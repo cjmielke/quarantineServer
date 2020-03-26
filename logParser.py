@@ -75,6 +75,12 @@ def scanAndInsert():
 				print filePath, ' is not good'
 				continue
 
+			job = getJob(jobID)
+			if not job:
+				print 'Cannot find job ', jobID
+				continue
+
+
 			#results = parseLogfile(fileName)
 			p = LogParser(filePath)
 			#outFile = os.path.join(RESULTS_STORAGE, '%d.traj.pdbqt' % jobID)
@@ -92,7 +98,6 @@ def scanAndInsert():
 			#r = Result()
 			#r.id = jobID
 
-			job = getJob(jobID)
 			job.uploaded = True
 			db.session.commit()
 
