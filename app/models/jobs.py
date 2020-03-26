@@ -35,8 +35,11 @@ class Job(db.Model):
 
 	timestamp = db.Column('timestamp', db.DateTime, default=datetime.datetime.utcnow)
 
+	uploaded = db.Column('uploaded', db.Boolean, index=True)
+
 
 def getJob(id):
+	# type: (int) -> Job
 	job = Job.query.get(int(id))
 	return job
 

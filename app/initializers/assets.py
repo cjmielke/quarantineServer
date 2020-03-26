@@ -18,6 +18,7 @@ css_bundle = Bundle(
 
 coffeeScripts = [
 	'coffee/init.js.coffee',
+	'coffee/ngl.js.coffee',
 ]
 
 

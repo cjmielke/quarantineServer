@@ -47,6 +47,6 @@ LIVE_RECEPTORS = ALL_RECEPTORS				# receptors currently being assigned
 LOCAL_ZINC = os.path.join(os.getcwd(), 'ZINCDB')
 
 RESULTS_STORAGE = os.path.join(os.getcwd(), 'DLG')
-
+RESULTS_HOSTING = os.path.join(STATIC_FOLDER, 'results')
 
 DOCKING_ALGOS = ['AD4', 'AD-gpu', 'AD-vina', 'AD-win']

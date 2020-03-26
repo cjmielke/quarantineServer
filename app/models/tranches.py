@@ -31,7 +31,6 @@ class Tranche(db.Model):
 	pH = db.Column('pH', db.String(1), index=True)
 	charge = db.Column('charge', db.String(1), index=True)
 
-
 	local = db.Column('local', db.Integer, index=True)
 
 
