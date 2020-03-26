@@ -5,12 +5,9 @@ import gzip
 import os
 import shutil
 
-from sqlalchemy import text
-
-from app.initializers.settings import LOCAL_ZINC, RESULTS_HOSTING
+from app.initializers.settings import RESULTS_HOSTING
 from app.models import db
-from app.models.jobs import Result, Job, getJob
-from app.models.tranches import Tranche, getTranche
+from app.models.jobs import Job, getJob
 
 '''
 
@@ -29,7 +26,7 @@ args = parser.parse_args()
 debug = True
 if args.production: debug = False
 
-from quarantineAtHome.docking.parsers import parseLogfile, LogParser
+from quarantineAtHome.docking.parsers import LogParser
 
 '''
 '''
@@ -107,7 +104,7 @@ def printSchema(model):
 
 
 if __name__ == "__main__":
-	printSchema(Result)
+	#printSchema(Result)
 	printSchema(Job)
 	scanDir(db)
 

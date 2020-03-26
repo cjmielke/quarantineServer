@@ -44,6 +44,21 @@ def getJob(id):
 	return job
 
 
+'''
+This is a table that holds records of processed logfiles - which will be a small subset of all jobs
+Could store one row per ligand pose .....
+'''
+# FIXME - On second thought, I feel like just adding a 'haveLog' column to the Jobs table for now
+class Result(db.Model):
+
+	__tablename__ = 'results'
+
+	id = db.Column('jobID', db.Integer, primary_key = True)
+	pose = db.Column('pose', db.Integer, primary_key = True)
+
+	energy = db.Column('energy', db.Float, index=True)
+
+
 def testModels():
 
 	test_user = 'testUser'
