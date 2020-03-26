@@ -38,9 +38,14 @@ def validateLogFile(fileName):
 	if gzMagic.startswith('gzip compressed data, was "dock.dlg"'):
 		fileMagic = magic.from_buffer(gzip.open(fileName).read(2048))
 		#print fileMagic
-		if fileMagic == 'ASCII text': return True
-
-	return False
+		if fileMagic == 'ASCII text':
+			return True
+		else:
+			print 'filemagic is not valid : ', fileMagic
+			return False
+	else:
+		print 'GZMAGIC is not valid :', gzMagic
+		return False
 
 
 from app.initializers.settings import RESULTS_STORAGE
