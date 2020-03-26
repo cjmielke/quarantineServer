@@ -34,10 +34,10 @@ from quarantineAtHome.docking.parsers import LogParser
 import magic
 def validateLogFile(fileName):
 	gzMagic = magic.from_buffer(open(fileName).read(2048))
-	print gzMagic
+	#print gzMagic
 	if gzMagic.startswith('gzip compressed data, was "dock.dlg"'):
 		fileMagic = magic.from_buffer(gzip.open(fileName).read(2048))
-		print fileMagic
+		#print fileMagic
 		if fileMagic == 'ASCII text': return True
 
 	return False
@@ -66,7 +66,9 @@ def scanAndInsert():
 			path, fileName = os.path.split(filePath)
 			good = validateLogFile(filePath)
 			jobID = int(fileName.replace('.dlg.gz',''))
-			if not good: continue
+			if not good:
+				print filePath, ' is not good'
+				continue
 
 			#results = parseLogfile(fileName)
 			p = LogParser(filePath)
@@ -85,11 +87,10 @@ def scanAndInsert():
 			#r = Result()
 			#r.id = jobID
 
-			if db:
-				job = getJob(jobID)
-				job.uploaded = True
+			job = getJob(jobID)
+			job.uploaded = True
 
-		if db: db.session.update()
+		#db.session.commit()
 
 
 
