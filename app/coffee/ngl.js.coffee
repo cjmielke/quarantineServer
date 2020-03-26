@@ -172,7 +172,7 @@ document.addEventListener 'DOMContentLoaded', ->
 		), false
 
 
-		loadDockingResults('mpro-1', 52)
+		loadDockingResults(document.receptor, document.jobID)
 
 
 #loadDockingResults = (receptor, jobID) ->
