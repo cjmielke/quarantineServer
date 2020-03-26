@@ -96,6 +96,7 @@ loadDockingResults = (receptor, jobID) ->
 
 	# Code for example: interactive/annotation
 	mol='/static/receptors/'+receptor+'/receptor.pdbqt'
+	console.log 'Loading receptor: ', mol
 	stage.loadFile(mol).then (o) ->
 		o.addRepresentation 'cartoon', color: 'chain'
 		#o.addRepresentation 'spacefill', color: 'resname', opacity: 0.5
