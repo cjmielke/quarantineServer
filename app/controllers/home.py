@@ -33,13 +33,17 @@ def index():
 
 		if r.receptor not in ALL_RECEPTORS: continue			# defense against injection
 
+		if r.uploaded: resultsLink = "<a target='BLANK' href='/view/%s/'>Results</a>" % (r.jobID)
+		else: resultsLink = ''
+
 		results.append((
 			r.jobID,
 			user,
 			#zinc,
 			"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zinc, zinc),
 			"<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (r.receptor, r.receptor),
-			r.bestDG
+			r.bestDG,
+			resultsLink
 		))
 
 

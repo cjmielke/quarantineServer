@@ -120,3 +120,6 @@ if __name__ == "__main__":
 	if args.scan:
 		findLocalTranches()
 
+	if not args.load or args.scan:
+		print 'need a command'
+	#	args.us

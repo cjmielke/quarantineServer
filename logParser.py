@@ -20,11 +20,11 @@ For parsing uploaded logfiles
 
 parser = argparse.ArgumentParser()
 #parser.add_argument('directory', required=True)
-#parser.add_argument('-production', action='store_true')
+parser.add_argument('-dev', action='store_true')
 args = parser.parse_args()
 
-debug = True
-#if args.production: debug = False
+debug = False
+if args.dev: debug = True
 
 from quarantineAtHome.docking.parsers import LogParser
 
@@ -61,11 +61,19 @@ def scanDir(db):
 def scanAndInsert():
 	from app.core import create_app
 
-	app = create_app(debug=False)
+	app = create_app(debug=debug)
 
 	with app.app_context():
 		#db.create_all()
 		# your code here
+
+		if debug:
+			for n in range(10):
+				j = Job()
+				j.receptor = 'mpro-1'
+				db.session.add(j)
+				db.session.commit()
+
 
 		for filePath in glob.glob(os.path.join(RESULTS_STORAGE, '*.dlg.gz')):
 			path, fileName = os.path.split(filePath)
