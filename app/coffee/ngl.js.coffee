@@ -33,8 +33,9 @@ loadPoseTrajectory = (jobID) ->
 			mode: 'loop'				# either "loop" or "once"
 			direction: 'bounce')		# either "forward", "backward" or "bounce"
 		player.play()
+		o.addRepresentation 'ball+stick'
 		o.addRepresentation 'licorice'
-		o.addRepresentation 'spacefill', opacity: 0.6
+		#o.addRepresentation 'spacefill', opacity: 0.6
 		#o.autoView()
 		return
 
