@@ -25,7 +25,7 @@ loadPoseTrajectory = (jobID) ->
 		player = new (NGL.TrajectoryPlayer)(traj,
 			step: 1						# how many frames to skip when playing
 			timeout: 400				# how many milliseconds to wait between playing frames
-			interpolateStep: 5			#
+			interpolateStep: 2			#
 			start: 0					# first frame to play
 			end: traj.numframes
 			#interpolateType: 'linear'	# linear or spline
