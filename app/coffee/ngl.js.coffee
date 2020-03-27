@@ -24,7 +24,7 @@ loadPoseTrajectory = (jobID) ->
 		traj = o.addTrajectory().trajectory
 		player = new (NGL.TrajectoryPlayer)(traj,
 			step: 1						# how many frames to skip when playing
-			timeout: 100				# how many milliseconds to wait between playing frames
+			timeout: 400				# how many milliseconds to wait between playing frames
 			interpolateStep: 5			#
 			start: 0					# first frame to play
 			end: traj.numframes
@@ -34,7 +34,7 @@ loadPoseTrajectory = (jobID) ->
 			direction: 'bounce')		# either "forward", "backward" or "bounce"
 		player.play()
 		o.addRepresentation 'licorice'
-		#o.addRepresentation 'spacefill', opacity: 0.6
+		o.addRepresentation 'spacefill', opacity: 0.6
 		#o.autoView()
 		return
 
