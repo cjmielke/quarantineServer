@@ -229,7 +229,7 @@ def submitResults():
 			logFile.save(savePath)
 
 
-		return jsonify(**{'status': 'thanks'})
+		return jsonify(**dict(status='thanks', id=j.id))
 
 
 add_blueprint(bp)

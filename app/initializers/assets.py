@@ -21,6 +21,10 @@ coffeeScripts = [
 	'coffee/ngl.js.coffee',
 ]
 
+clientCoffeeScripts = [
+	'coffee/init.js.coffee',
+	'coffee/client.js.coffee',
+]
 
 
 def register_coffeeScript(path):
@@ -59,6 +63,18 @@ def init_assets(app):
 
 
 
+	clientCoffee = Bundle(
+		*clientCoffeeScripts,
+		filters='coffeescript', output='js/clientcoffee.js')
+
+	# FIXME - still don't understand why these JS bundles arent compiling ....
+	clientJs = Bundle(
+		#lib_js_bundle,
+		clientCoffee,
+		#filters='yui_js',
+		output='js/client.min.js')
+
+
 	#app.config['ASSETS_DEBUG'] = settings.DEBUG
 	app.config['ASSETS_DEBUG'] = False
 	flaskAssets = Environment(app)
@@ -78,9 +94,15 @@ def init_assets(app):
 
 	flaskAssets.register('coffee', coffee_bundle)
 	flaskAssets.register('js', js_bundle)
+
+	flaskAssets.register('clientcoffee', clientCoffee)
+	flaskAssets.register('clientjs', clientJs)
+
 	# webassets.manifest = 'cache' if not app.debug else False
 	# webassets.cache = not app.debug
+	#flaskAssets.cache = False
 	flaskAssets.debug = app.debug
+
 	#flaskAssets.debug = False
 
 	for bundle, name in externalBundles:
