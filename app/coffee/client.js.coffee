@@ -1,16 +1,3 @@
-# Setup to load data from rawgit
-#NGL.DatasourceRegistry.add 'data', new (NGL.StaticDatasource)('//cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/data/')
-# Create NGL Stage object
-
-# Call this function in the browser console to get the orientation string of the NGL viewer
-document.printOrientation = () ->
-	console.log document.stage.viewerControls.getOrientation().elements
-
-# FIXME - import this from elsewhere and make shared between client and server
-receptorOrientations =
-	'mpro-1': '{"elements":[23.101994512069314, 4.683107682230051, 25.532454150878166, 0, 23.578908764996665, -18.081098751762873, -18.018012906376736, 0, 10.856922820904488, 29.303280314984292, -15.198186053368184, 0, -7.13700008392334, 1.7085000872612, -26.385000228881836, 1]}'
-	'spike-1': '{"elements":[-10.248018011734107, 53.494595049708416, -52.82097738332285, 0, -57.02228201005461, -40.27164793961613, -29.722095333674165, 0, -48.99170037493601, 35.682935657340394, 45.64307857361319, 0, -6.055524473477347, 3.0221278137468803, -82.51501341525847, 1]}'
-
 
 
 loadPoseTrajectory = (jobID) ->
@@ -110,31 +97,98 @@ loadDockingResults = (receptor, jobID) ->
 
 #loadReceptor('mpro-1')
 
+
+showReceptor = (status) ->
+	stage = document.stageReceptor
+
+	receptor = status.receptor
+	mol='/static/receptors/'+receptor+'/receptor.pdbqt'
+	console.log 'Loading receptor: ', mol
+	stage.loadFile(mol).then (o) ->
+		o.addRepresentation 'cartoon', color: 'chain'
+		#o.addRepresentation 'spacefill', color: 'resname', opacity: 0.5
+		o.addRepresentation 'surface', color: 'resname', opacity: 0.9
+		#o.addRepresentation 'cartoon'
+
+		#return
+		o.autoView()
+		root.setReceptorOrientation receptor, stage
+
+
+
+showLigand = (status) ->
+	stage = document.stageLigand
+	console.log 'updates'
+	status.zincID = status.ligand
+	$('#ligandlink').html('<a href="http://zinc.docking.org/substances/'+status.zincID+'/" target="BLANK">'+status.zincID+'</a>')
+
+	# Code for example: interactive/interpolate
+	#mol='/static/receptors/mpro-1/poses.pdbqt'
+	#mol='/static/52.traj.pdbqt'
+	#mol='/static/results/'+jobID+'.traj.pdbqt'
+	mol='ligand.pdbqt'
+	stage.loadFile(mol, asTrajectory: true).then (o) ->
+		traj = o.addTrajectory().trajectory
+		player = new (NGL.TrajectoryPlayer)(traj,
+			step: 1						# how many frames to skip when playing
+			timeout: 100				# how many milliseconds to wait between playing frames
+			interpolateStep: 5			#
+			start: 0					# first frame to play
+			end: traj.numframes
+			#interpolateType: 'linear'	# linear or spline
+			interpolateType: 'spline'
+			mode: 'loop'				# either "loop" or "once"
+			direction: 'bounce')		# either "forward", "backward" or "bounce"
+		player.play()
+		o.addRepresentation 'ball+stick'
+		o.addRepresentation 'licorice'
+		#o.addRepresentation 'spacefill', opacity: 0.6
+		o.autoView()
+		return
+
+
+
+
 document.jobs = []
+document.ligand = null
+document.receptor = null
+
+document.handleUpdate = (status) ->
+
+	# ligand has changed .... outer loop!
+	if status.ligand != document.ligand
+		document.ligand = status.ligand
+		console.log 'Starting new ligand!'
+		showLigand(status)
+
+	# next receptor
+	if status.receptor != document.receptor
+		document.receptor = status.receptor
+		console.log 'Receptor has changed!'
+		showReceptor(status)
 
 
-#$(document).ready ->
-document.addEventListener 'DOMContentLoaded', ->
 
-	if $('#viewport').length
-
-
-		document.stage = new (NGL.Stage)('viewport')
-		# Handle window resizing
+start = () ->
+	addResizeHandler = (stage) ->
 		window.addEventListener 'resize', ((event) ->
-			#stage.handleResize()
+			stage.handleResize()
 			return
 		), false
 
 
+	if $('.viewport').length
+		document.stageLigand = new (NGL.Stage)('ligand')
+		addResizeHandler document.stageLigand
+
+		document.stageReceptor = new (NGL.Stage)('receptor')
+		addResizeHandler document.stageReceptor
+
+
 	taskPoll = (taskID) ->
-		$.get('lastJob.json', (response) ->
-			console.log response
-			if response.status == 'SUCCESS'
-				finished = true
-				#$('#waitSpin').spin(false)
-				#$('#waitSpin .status').html('Done!')
-				#$('#buttons').show()
+		$.get('update.json', (response) ->
+			#console.log response
+			document.handleUpdate response
 			return
 		'json').fail(->
 			console.log 'Couldnt poll for jobs :('
@@ -150,6 +204,17 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
 
+
+
+#$(document).ready ->
+#document.addEventListener 'DOMContentLoaded', ->
+$(document).ready ->
+	if Raven?
+		Raven.context ->
+			start()
+			return
+	else
+		start()
 
 
 #loadDockingResults = (receptor, jobID) ->
