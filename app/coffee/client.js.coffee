@@ -122,6 +122,8 @@ showLigand = (status) ->
 	status.zincID = status.ligand
 	$('#ligandlink').html('<a href="http://zinc.docking.org/substances/'+status.zincID+'/" target="BLANK">'+status.zincID+'</a>')
 
+	stage.removeAllComponents()
+
 	# Code for example: interactive/interpolate
 	#mol='/static/receptors/mpro-1/poses.pdbqt'
 	#mol='/static/52.traj.pdbqt'
