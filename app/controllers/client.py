@@ -31,18 +31,28 @@ def lastJob():
 	lj = {"lastResults": {"tranche": 158, "ligand": 1, "zincID": "ZINC000004018039", "receptor": "mpro-1", "user": None, "time": 112.50104594230652, "bestDG": -7.74, "meanDG": -6.891666666666666, "algo": "AD4"}, "receptor": "spike-1", "ligand": "ZINC000004018039", "lastJob": 101}
 	return jsonify(**lj)
 
+
+
 # an endpoint for testing the client-side javascript for configuring program settings
-clientSettings = dict(username='anonymous')
-@bp.route('/config', methods=['GET','POST'])
+clientSettings = dict(username='anonymousB')
+
+@bp.route('settings.json', methods=['GET','POST'])
+def settings():
+	if request.method == 'GET':
+		return jsonify(**clientSettings)
+
+@bp.route('config', methods=['GET','POST'])
 def config():
 	if request.method == 'GET':
 		return jsonify(**clientSettings)
 	if request.method == 'POST':
-		content = request.get_json()
-		for key in content.keys():
-			clientSettings[key] = content[key]
-		#return jsonify(**{'status', 'okay'})
-		return jsonify(**clientSettings)
+		assert request.is_json
+		j = request.get_json()
+		#print request.form['username']
+		#clientSettings['username'] = request.form['username']
+		clientSettings['username'] = j['username']
+		response = {'status': 'ok'}
+		return jsonify(**response)
 
 
 

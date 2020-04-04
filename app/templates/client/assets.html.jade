@@ -8,8 +8,8 @@ html
 		//link(rel='shortcut icon', href='/static/favicon.ico')
 
 
-		//link(rel='stylesheet',href='https://stackpath.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',type='text/css')
-		link(rel='stylesheet',href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css',type='text/css')
+		link(rel='stylesheet',href='https://stackpath.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css',type='text/css')
+		//link(rel='stylesheet',href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css',type='text/css')
 
 		block css
 
@@ -47,7 +47,6 @@ html
 
 			.top_wrapper
 				block header
-					h4 Client
 
 
 
@@ -83,13 +82,17 @@ html
 		script(src='https://cdn.rawgit.com/arose/ngl/v2.0.0-dev.32/dist/ngl.js')
 		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
 
-		//script(src='https://stackpath.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
-		script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
+		script(src='https://stackpath.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+		//script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js')
 
 		block moreJS
 
-		- assets 'clientjs'
+		//
+			- assets 'clientjs'
+				script(src='{{ ASSET_URL }}')
+			- endassets
+
+
+		- assets 'clientcoffee'
 			script(src='{{ ASSET_URL }}')
 		- endassets
-
-

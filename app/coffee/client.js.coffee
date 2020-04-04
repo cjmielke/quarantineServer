@@ -124,28 +124,15 @@ showLigand = (status) ->
 
 	stage.removeAllComponents()
 
-	# Code for example: interactive/interpolate
-	#mol='/static/receptors/mpro-1/poses.pdbqt'
-	#mol='/static/52.traj.pdbqt'
-	#mol='/static/results/'+jobID+'.traj.pdbqt'
 	mol='ligand.pdbqt'
 	stage.loadFile(mol, asTrajectory: true).then (o) ->
 		traj = o.addTrajectory().trajectory
-		player = new (NGL.TrajectoryPlayer)(traj,
-			step: 1						# how many frames to skip when playing
-			timeout: 100				# how many milliseconds to wait between playing frames
-			interpolateStep: 5			#
-			start: 0					# first frame to play
-			end: traj.numframes
-			#interpolateType: 'linear'	# linear or spline
-			interpolateType: 'spline'
-			mode: 'loop'				# either "loop" or "once"
-			direction: 'bounce')		# either "forward", "backward" or "bounce"
-		player.play()
 		o.addRepresentation 'ball+stick'
 		o.addRepresentation 'licorice'
 		#o.addRepresentation 'spacefill', opacity: 0.6
 		o.autoView()
+		stage.spinAnimation.axis.set Math.random(),Math.random(),Math.random()
+		stage.setSpin true
 		return
 
 
@@ -154,6 +141,11 @@ showLigand = (status) ->
 document.jobs = []
 document.ligand = null
 document.receptor = null
+
+document.ligands = []
+document.ligandStages = []
+
+
 
 document.handleUpdate = (status) ->
 
@@ -171,20 +163,65 @@ document.handleUpdate = (status) ->
 
 
 
+initSettingsPanel = ->
+
+	# prepopulate current values
+	$.get('settings.json', (response) ->
+		$('#username').val response.username
+		return
+	'json')
+
+	# register click handler
+	$('#settings').submit (event) ->
+		event.preventDefault()
+		data = {username: $('#username').val()}
+		#$.post('config', JSON.stringify(data), (response) ->
+		#	console.log 'post result', response
+		#	return
+		#, 'json')
+		# FFS how many times have I had to re-solve this?
+		$.ajax
+			type: 'POST'
+			contentType: "application/json; charset=utf-8"
+			url: 'config'
+			data: JSON.stringify(data)
+			dataType: 'json'
+			success: (resp) ->
+				console.log resp
+				return
+
+
 start = () ->
+
+	initSettingsPanel()
+
 	addResizeHandler = (stage) ->
 		window.addEventListener 'resize', ((event) ->
-			stage.handleResize()
+			#stage.handleResize()
 			return
 		), false
 
 
 	if $('.viewport').length
-		document.stageLigand = new (NGL.Stage)('ligand')
+		document.stageLigand = new (NGL.Stage)('ligand', { backgroundColor: "white" })
 		addResizeHandler document.stageLigand
 
 		document.stageReceptor = new (NGL.Stage)('receptor')
 		addResizeHandler document.stageReceptor
+
+		$('.ligDisplay').each (index) ->
+			console.log index
+			element = $(this)[0]
+			console.log element
+			stageDiv = $(this).children('.ligandStage')[0]
+			console.log 'stagediv', stageDiv
+
+			link = $(this).children('p')[0]
+
+			stage = new (NGL.Stage)(stageDiv)
+
+			document.ligandStages.push [stage, link]
+
 
 
 	taskPoll = (taskID) ->
@@ -196,14 +233,13 @@ start = () ->
 			console.log 'Couldnt poll for jobs :('
 			return
 		).always(->
-			setTimeout(taskPoll, 1000)
+			#setTimeout(taskPoll, 5000)
 			return
 		)
 		return
 
 
-	setTimeout(taskPoll, 1000)
-
+	taskPoll()
 
 
 
@@ -217,6 +253,9 @@ $(document).ready ->
 			return
 	else
 		start()
+
+
+
 
 
 #loadDockingResults = (receptor, jobID) ->

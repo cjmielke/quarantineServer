@@ -40,3 +40,34 @@ MYSQL_PASSWORD = 'password'
 To run the server, pass the production flag
 
     python2.7 runserver.py -production
+
+
+
+##### Client notes
+
+This webserver also contains a "client" controller that serves up a page at '/client/' - including demo ligans and receptors.
+This page, and associated coffeescript, serves as a place to develop the frontend that runs on the users client computer.
+Hosting it on the main server like this permits more rapid development with coffeescript and jade/pug templates, and these are dependencies I'd rather not push onto the client stack.
+
+Regarding the interface, this is what Im thinking.....
+* Slow clients will run 1 ligand at a time, against multiple receptors
+* Fast clients will download batches of several ligands at a time, and run them against multiple receptors
+
+It's easy to use NGL to display a running queue of ligands as they come in. Could implement it as a deque.
+
+Displaying multiple receptors is more intensive on the graphics. A client probably shouldn't display more than a handful of receptors at a time.
+I can either limit the set of receptors a client works on, or I can implement a selector whereby the user chooses which receptor result to see.
+
+* implementing a selector like this would require a /results/ subdirectory that fills with ligand structures, poses
+* a list of jobs would need to be stored somewhere, storing ligand names, receptor names, energies. Could throw into sqlite, for now, JSON or txt
+
+
+Endpoints :
+* status.json : main polling endpoint, will have a jobID that the frontend could compare -> triggers client insert of rows to top of results table
+* results.json : endpoint that returns last N jobs completed to pre-populate table
+
+
+
+
+
+
