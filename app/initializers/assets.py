@@ -65,7 +65,7 @@ def init_assets(app):
 
 	clientCoffee = Bundle(
 		*clientCoffeeScripts,
-		filters='coffeescript', output='js/clientcoffee.js')
+		filters='coffeescript', output='js/client.v1.js')
 
 	# FIXME - still don't understand why these JS bundles arent compiling ....
 	clientJs = Bundle(
@@ -96,7 +96,7 @@ def init_assets(app):
 	flaskAssets.register('js', js_bundle)
 
 	flaskAssets.register('clientcoffee', clientCoffee)
-	flaskAssets.register('clientjs', clientJs)
+	#flaskAssets.register('clientjs', clientJs)
 
 	# webassets.manifest = 'cache' if not app.debug else False
 	# webassets.cache = not app.debug

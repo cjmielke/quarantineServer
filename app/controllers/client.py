@@ -17,13 +17,13 @@ easily deploy updates to the client interface
 '''
 
 
-@bp.route('/')
-def index():
-	return render_template('client/client.html.jade')
+#@bp.route('/')
+#def index():
+#	return render_template('client/client.html.jade')
 
-@bp.route('/index.html')
-def index2():
-	return render_template('client/client.html.jade')
+@bp.route('/index-v1.html')
+def index1():
+	return render_template('client/client.v1.html.jade')
 
 @bp.route('update.json')
 def lastJob():
