@@ -116,7 +116,8 @@ document.handleUpdate = (status) ->
 
 	if status.lastResults
 		res=status.lastResults
-		setReceptorName(res.receptor)
+		setReceptorName res.receptor
+		$('#pan2').html 'Previous Result'
 		if res.lastJob != document.lastJob
 			document.lastJob = res.lastJob
 			loadDockingResults(res.receptor, 'lastTrajectory.pdbqt')
@@ -199,7 +200,7 @@ start = () ->
 			console.log 'Couldnt poll for jobs :('
 			return
 		).always(->
-			setTimeout(taskPoll, 5000)
+			setTimeout(taskPoll, 3000)
 			return
 		)
 		return
