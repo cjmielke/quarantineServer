@@ -112,6 +112,7 @@ showReceptor = (status) ->
 
 		#return
 		o.autoView()
+		stage.setRock true
 		root.setReceptorOrientation receptor, stage
 
 

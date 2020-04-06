@@ -1,3 +1,6 @@
+import random
+from collections import deque
+
 from flask import Blueprint, render_template, jsonify, request
 from sqlalchemy import text
 
@@ -25,9 +28,26 @@ easily deploy updates to the client interface
 def index1():
 	return render_template('client/client.v1.html.jade')
 
+
+
+class FakeConsole():
+	def __init__(self):
+		self.deque = deque([], maxlen=5)
+		self.total = 0
+	def simulate(self):
+		lines = random.randint(4, 10)
+		for n in xrange(0, lines): self.deque.append(n)     # append fake output
+		return
+	def getNewLines(self, lastLine):            # client indicates last line it received, return diff
+		return
+
+con = FakeConsole()
+
+
 @bp.route('update.json')
 def lastJob():
 	lj = {"tranche": 446, "ligand": 1, "user": None, "receptor": "mpro-1", "algo": "AD4", "time": 167.92191004753113, "bestDG": -3.35, "meanDG": -2.283529411764706, "zincID": "ZINC000008384274"}
+	console = con.simulate()
 	lj = {"lastResults": {"tranche": 158, "ligand": 1, "zincID": "ZINC000004018039", "receptor": "mpro-1", "user": None, "time": 112.50104594230652, "bestDG": -7.74, "meanDG": -6.891666666666666, "algo": "AD4"}, "receptor": "spike-1", "ligand": "ZINC000004018039", "lastJob": 101}
 	return jsonify(**lj)
 
