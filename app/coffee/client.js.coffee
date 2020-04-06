@@ -5,14 +5,15 @@ loadPoseTrajectory = (stage, mol) ->
 		traj = o.addTrajectory().trajectory
 		player = new (NGL.TrajectoryPlayer)(traj,
 			step: 1						# how many frames to skip when playing
-			timeout: 500				# how many milliseconds to wait between playing frames
+			timeout: 800				# how many milliseconds to wait between playing frames
 			interpolateStep: 10			#
 			start: 0					# first frame to play
-			end: traj.numframes
+			end: Math.min(traj.frameCount,2)
 			#interpolateType: 'linear'	# linear or spline
 			interpolateType: 'spline'
 			mode: 'loop'				# either "loop" or "once"
 			direction: 'bounce')		# either "forward", "backward" or "bounce"
+		console.log 'trajframes', Math.min(traj.frameCount,2)
 		player.play()
 		o.addRepresentation 'ball+stick', color: 'partialCharge'
 		#o.addRepresentation 'licorice'
@@ -96,10 +97,21 @@ document.lastJob = null
 document.ligands = []
 document.ligandStages = []
 
+document.lostConnectionCount = 0
+
 
 setReceptorName = (rec) ->
 	link = "<a href='https://cjmielke.github.io/quarantine-files/receptors/#{rec}/' target='BLANK'>#{rec}</a>"
 	$('#receptorName').html link
+
+updateResults = (status) ->
+	results = status.lastResults
+	$('#pan2').html 'Previous Result'
+
+	setReceptorName results.receptor
+	Jid = status.lastJob
+	$('#jobID').html "<a href='https://quarantine.infino.me/view/"+Jid+"/' target='BLANK'>"+Jid+"</a>"
+	$('#bestDG').html results.bestDG+' kcal/mol'
 
 
 document.handleUpdate = (status) ->
@@ -116,10 +128,10 @@ document.handleUpdate = (status) ->
 
 	if status.lastResults
 		res=status.lastResults
-		setReceptorName res.receptor
-		$('#pan2').html 'Previous Result'
-		if res.lastJob != document.lastJob
-			document.lastJob = res.lastJob
+		#setReceptorName res.receptor
+		updateResults status
+		if status.lastJob != document.lastJob
+			document.lastJob = status.lastJob
 			loadDockingResults(res.receptor, 'lastTrajectory.pdbqt')
 	# next receptor
 	else
@@ -197,7 +209,10 @@ start = () ->
 			document.handleUpdate response
 			return
 		'json').fail(->
-			console.log 'Couldnt poll for jobs :('
+			console.log 'Couldnt poll for jobs :(', document.lostConnectionCount
+			document.lostConnectionCount += 1
+			if document.lostConnectionCount == 5
+				alert 'Lost connection to main program. Note, you need to keep the console window open'
 			return
 		).always(->
 			setTimeout(taskPoll, 3000)

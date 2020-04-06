@@ -106,8 +106,15 @@ block content
 						.panel-heading
 							h3.panel-title#pan2 Target Protein
 						center
-							h3 Receptor &nbsp;
-								span#receptorName
+							table(width='80%')
+								tr
+									td
+									td Receptor : &nbsp;
+										span#receptorName
+									td Best Binding Energy : &nbsp;
+										span#bestDG
+									td Job ID : &nbsp;
+										span#jobID
 							#receptor.viewport(style="width:100%; height:100%;")
 	br
 	br
