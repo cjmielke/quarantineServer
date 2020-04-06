@@ -1,3 +1,6 @@
 [submodule "quarantineAtHome"]
 	path = quarantineAtHome
 	url = https://github.com/cjmielke/quarantineAtHome
+[submodule "quarantine-files"]
+	path = quarantine-files
+	url = https://github.com/cjmielke/quarantine-files
