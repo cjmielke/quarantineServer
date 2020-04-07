@@ -9,7 +9,7 @@ from app.core import app, create_app
 from raven.contrib.flask import Sentry
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-production', action='store_true')
+parser.add_argument('-debug', action='store_true')
 
 
 
@@ -25,13 +25,13 @@ def main():
 
 	args = parser.parse_args()
 
-	debug = True
-	if args.production: debug=False
+	debug = False
+	if args.debug: debug=True
 
 	create_app(debug)
 	print 'Debug state: ', app.debug
 
-	if args.production:
+	if not debug:
 		from app.initializers.secrets import SENTRY_DSN
 		sentry = Sentry(app, dsn=SENTRY_DSN)
 
