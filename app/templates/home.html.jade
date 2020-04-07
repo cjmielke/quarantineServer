@@ -23,20 +23,58 @@ block content
 						a(href='https://github.com/cjmielke/quarantineAtHome' target='BLANK') source code here
 
 				.col-sm-6.col-md-6.col.lg-6
-					img(src="https://www.infino.me/static/spike1.jpg", width='80%')
-			.card
-				.card-header Linux
-				.card-body
-					p Fetch code
-					code git clone https://github.com/cjmielke/quarantineAtHome && cd quarantineAtHome
-					br
-					br
-					p  With and Nvidia GPU (requires nvidia-docker2)
-					code sudo docker build -t quarantinegpu -f Dockerfile.gpu . && sudo nvidia-docker run -it -e ME=<b>anonymous</b> quarantinegpu
-					br
-					br
-					p CPU only (slower)
-					code sudo docker build -t quarantine -f Dockerfile . && sudo docker run -it -e ME=<b>anonymous</b> quarantine
+					//img(src="https://www.infino.me/static/spike1.jpg", width='80%')
+					img(src="https://cjmielke.github.io/quarantine-files/receptors/mpro-1/img/x0678.png", width='80%')
+					//img(src='https://cjmielke.github.io/quarantine-files/imgs/client.png', width='80%')
+					//img(src='/static/client.png', width='100%')
+
+			br
+			br
+
+			.row
+				.hr
+				.col-md-12
+
+					h4 Join the Quaranteam!
+					h5 Donate your computer power to find drugs to fight COVID-19
+
+					ul.nav.nav-tabs#myTab(role='tablist')
+						li.nav-item
+							a.nav-link.active#winmac-tab(href="#winmac", data-toggle='tab', role="tab", aria-controls="winmac", aria-selected="true") Windows & Mac
+						li.nav-item
+							a.nav-link#linux-tab(href="#linux-content", data-toggle='tab', role="tab", aria-controls="linux-content", aria-selected="false") Linux | Docker | GPU
+					.tab-content#myTabContent
+						.tab-pane.fade.show.active#winmac(role='tabpanel', aria-labelledby="winmac-tab")
+							.card
+								//.card-header Windows and Mac OSX builds
+								.card-body
+									ul
+										li The Windows version is working well - &nbsp;
+											a(href="https://cjmielke.github.io/quarantine-files/releases/quarantineInstall.exe") Download Installer
+
+										li The Mac OSX port is still in alpha. Let us know if it doesn't work for you! - &nbsp;
+											a(href="https://cjmielke.github.io/quarantine-files/releases/QuarantineAtHome.dmg") Download DMG
+
+									center
+										img(src='https://cjmielke.github.io/quarantine-files/imgs/client.png', width='80%')
+
+
+						.tab-pane.fade#linux-content(role='tabpanel', aria-labelledby="linux-tab")
+							.card
+								.card-header Linux
+								.card-body
+									p Fetch code
+									code git clone https://github.com/cjmielke/quarantineAtHome && cd quarantineAtHome
+									br
+									br
+									p  With and Nvidia GPU (requires nvidia-docker2)
+									code sudo docker build -t quarantinegpu -f Dockerfile.gpu . && sudo nvidia-docker run -it -e ME=<b>anonymous</b> quarantinegpu
+									br
+									br
+									p CPU only (slower)
+									code sudo docker build -t quarantine -f Dockerfile . && sudo docker run -it -e ME=<b>anonymous</b> quarantine
+
+
 
 
 
