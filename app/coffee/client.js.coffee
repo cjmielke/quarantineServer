@@ -170,6 +170,14 @@ initSettingsPanel = ->
 				return
 
 
+lostConnection = () ->
+	#alert 'Lost connection to main program. Note, you need to keep the console window open'
+	$('#modal img').attr('src','https://quarantine.infino.me/static/qah-console.png')
+	$('.modal').modal('show');
+
+
+
+
 start = () ->
 
 	initSettingsPanel()
@@ -212,7 +220,7 @@ start = () ->
 			console.log 'Couldnt poll for jobs :(', document.lostConnectionCount
 			document.lostConnectionCount += 1
 			if document.lostConnectionCount == 5
-				alert 'Lost connection to main program. Note, you need to keep the console window open'
+				lostConnection()
 			return
 		).always(->
 			setTimeout(taskPoll, 3000)
