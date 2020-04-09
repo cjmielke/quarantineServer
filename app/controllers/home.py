@@ -15,7 +15,7 @@ def crash():
 @bp.route('/ip')
 def myIP():
 	ip = ip_address(unicode(request.remote_addr))
-	return ip
+	return str(int(ip))
 
 
 # FIXME - Make a homepage later .... with a table of best results
