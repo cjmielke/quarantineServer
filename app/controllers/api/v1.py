@@ -213,7 +213,7 @@ def submitResults():
 		if receptor not in ALL_RECEPTORS:
 			raise ValueError('invalid receptor reported!')
 		j.receptor = receptor
-		#j.ipAddr = int(ip)                         # not working since uwsgi deployment!
+		j.ipAddr = int(ip)                         # not working since uwsgi deployment!
 		j.bestDG = float(content['bestDG'])
 
 		bestKi = content.get('bestKi', None)
