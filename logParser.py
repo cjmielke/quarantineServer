@@ -90,7 +90,12 @@ def scanAndInsert():
 
 
 			#results = parseLogfile(fileName)
-			p = LogParser(filePath)
+
+			try: p = LogParser(filePath)
+			except Exception as e:
+				print e
+
+
 			#outFile = os.path.join(RESULTS_STORAGE, '%d.traj.pdbqt' % jobID)
 			#outPath = os.path.join(RESULTS_HOSTING, '%d' % jobID)
 			#if not os.path.exists(outPath): os.makedirs(outPath)
