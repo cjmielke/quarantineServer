@@ -7,6 +7,10 @@ from app.models import db
 
 bp = Blueprint('home', __name__, url_prefix='/')
 
+@bp.route('/crash')
+def crash():
+	return 1/0
+
 
 # FIXME - Make a homepage later .... with a table of best results
 @bp.route('/')
