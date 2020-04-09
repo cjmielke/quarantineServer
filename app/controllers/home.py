@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
+from ipaddress import ip_address
 from sqlalchemy import text
 
 from app.controllers import add_blueprint
@@ -10,6 +11,11 @@ bp = Blueprint('home', __name__, url_prefix='/')
 @bp.route('/crash')
 def crash():
 	return 1/0
+
+@bp.route('/ip')
+def myIP():
+	ip = ip_address(unicode(request.remote_addr))
+	return ip
 
 
 # FIXME - Make a homepage later .... with a table of best results
