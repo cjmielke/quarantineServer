@@ -3,7 +3,7 @@ import argparse
 
 from werkzeug.serving import WSGIRequestHandler
 
-from app.core import app, create_app
+from app.core import create_app
 
 #set up the flask app
 from raven.contrib.flask import Sentry
@@ -25,12 +25,12 @@ args = parser.parse_args()
 debug = False
 if args.debug: debug=True
 
-create_app(debug)
-print 'Debug state: ', app.debug
+App=create_app(debug)
+print 'Debug state: ', App.debug
 
 if not debug:
 	from app.initializers.secrets import SENTRY_DSN
-	sentry = Sentry(app, dsn=SENTRY_DSN)
+	sentry = Sentry(App, dsn=SENTRY_DSN)
 
 
 def main():
@@ -40,9 +40,9 @@ def main():
 	if debug: host='0.0.0.0'
 
 	if debug:
-		app.run(host=host, debug=app.debug, port=1313, threaded=True, request_handler=MyRequestHandler)
+		App.run(host=host, debug=App.debug, port=1313, threaded=True, request_handler=MyRequestHandler)
 	else:
-		app.run(host=host, debug=app.debug, port=1313, threaded=True)
+		App.run(host=host, debug=App.debug, port=1314, threaded=True)
 
 if __name__ == "__main__":
 	main()
