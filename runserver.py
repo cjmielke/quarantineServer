@@ -30,7 +30,8 @@ print 'Debug state: ', App.debug
 
 if not debug:
 	from app.initializers.secrets import SENTRY_DSN
-	sentry = Sentry(App, dsn=SENTRY_DSN)
+	#sentry = Sentry(App, dsn=SENTRY_DSN)               # this stopped working under uWSGI
+	sentry = Sentry(App)
 
 
 def main():
