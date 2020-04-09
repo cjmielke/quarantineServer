@@ -94,6 +94,7 @@ def scanAndInsert():
 			try: p = LogParser(filePath)
 			except Exception as e:
 				print e
+				continue
 
 
 			#outFile = os.path.join(RESULTS_STORAGE, '%d.traj.pdbqt' % jobID)
