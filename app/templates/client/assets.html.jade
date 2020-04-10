@@ -19,9 +19,23 @@ html
 
 		block meta
 
+			meta(property='og:title', content='Quarantine@Home')
 			meta(name='description', content='Quarantine@Home lets you donate your computer power to fight the coronavirus!')
+			meta(property='og:url', content='https://quarantine.infino.me')
 			meta(name="viewport",content="width=device-width, initial-scale=1.0")
-			meta(property="fb:app_id", content="{{FACEBOOK_KEY}}")
+
+			meta(property='og:image', content='https://quarantine.infino.me/static/img/spikeace2.jpeg')
+			meta(property='og:image:width', content='1600')
+			meta(property='og:image:height', content='1200')
+
+			meta(name='description', content='USA mortality data provided by the CDC')
+
+			meta(name='twitter:card', content='photo')
+			meta(name='twitter:title', content='Quarantine@Home')
+			meta(name='twitter:site', content='@InfinoMe')
+			meta(name='twitter:url', content='https://quarantine.infino.me')
+			meta(name='twitter:image', content='https://quarantine.infino.me/static/img/spikeace2.jpeg')
+
 
 
 		-if not DEBUG
