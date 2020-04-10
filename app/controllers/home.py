@@ -5,6 +5,7 @@ from sqlalchemy import text
 from app.controllers import add_blueprint
 from app.initializers.settings import ALL_RECEPTORS
 from app.models import db
+from app.util import safer
 
 bp = Blueprint('home', __name__, url_prefix='/')
 
@@ -39,8 +40,9 @@ def index():
 	for r in rows:
 		print r
 		user = r.username or ''
-		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
+		user = safer(user)
 
+		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
 
 		if r.receptor not in ALL_RECEPTORS: continue			# defense against injection
 

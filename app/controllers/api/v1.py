@@ -14,6 +14,7 @@ from app.models import db
 
 #from app.controllers.api import bp
 from app.models.tranches import getTranche
+from app.util import safer
 
 bp = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
@@ -191,6 +192,7 @@ def submitResults():
 		print request.files
 
 		userName = content.get('user', None)
+		userName = safer(userName)
 
 		user = User.query.filter(User.username == userName).first()
 		if not user:
@@ -212,6 +214,7 @@ def submitResults():
 		receptor = content['receptor']
 		if receptor not in ALL_RECEPTORS:
 			raise ValueError('invalid receptor reported!')
+
 		j.receptor = receptor
 		j.ipAddr = int(ip)                         # not working since uwsgi deployment!
 		j.bestDG = float(content['bestDG'])
@@ -221,12 +224,10 @@ def submitResults():
 		j.bestKi = bestKi
 
 		algo = content['algo']
-
 		assert algo in DOCKING_ALGOS
 		j.algo = algo
 
 		j.time = int(content['time'])
-
 
 		if 'test' not in content:
 			db.session.add(j)
