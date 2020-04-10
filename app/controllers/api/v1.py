@@ -192,7 +192,7 @@ def submitResults():
 		print request.files
 
 		userName = content.get('user', None)
-		userName = safer(userName)
+		if userName: userName = safer(userName)
 
 		user = User.query.filter(User.username == userName).first()
 		if not user:
