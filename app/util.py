@@ -20,8 +20,8 @@ def safer(txt):
     if txt is None: return txt
 
     tl = strip_tags(txt)
-    cs = tl.translate(None, ''.join(bad_chars))
-    return cs
+    #cs = tl.translate(None, ''.join(bad_chars))
+    return tl
 
 
 
