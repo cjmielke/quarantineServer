@@ -120,7 +120,9 @@ def assignTranche():
 		WHERE weight in ('A','B','C','D','E','F','G','H','I','J','K')
 		AND purchasibility in ('A','B')
 		AND pH in ('R','M')
-		AND charge in ('N','M','O');
+		AND charge in ('N','M','O')
+		AND loopCount<5
+		;
 	''')
 
 	rows = db.engine.execute(query)
