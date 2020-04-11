@@ -118,7 +118,6 @@ def assignTranche():
 	query = text('''
 		SELECT * from tranches
 		WHERE weight in ('A','B','C','D','E','F','G','H','I','J','K')
-		AND logP in ('A')
 		AND purchasibility in ('A','B')
 		AND pH in ('R','M')
 		AND charge in ('N','M','O');
