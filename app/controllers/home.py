@@ -20,7 +20,7 @@ def myIP():
 	return str(ip)
 
 
-
+# TODO - build in exclusion lists for specific columns
 def jobsTable(rows):
 
 	results = []
