@@ -29,26 +29,6 @@ def register_blueprints(app):
 
 
 
-# markdown stuff
-from markdown.treeprocessors import Treeprocessor
-
-BASE = 'https://media.mydomain.com/'
-
-class ImgBaseTreeprocessor(Treeprocessor):
-	def run(self, root):
-		# Loop through all img elements
-		for img in root.getiterator('img'):
-			# Join base to the src URL
-			img.set('src', urljoin(BASE, img.get('src')) )
-
-from markdown.extensions import Extension
-
-class ImgBase(Extension):
-	def extendMarkdown(self, md, md_globals):
-		# register the new treeprocessor with priority 15 (run after 'inline')
-		md.treeprocessors.register(ImgBaseTreeprocessor(md), 'imgbase', 15)
-
-
 def create_app(debug):
 	'''creates app instance, db instance, and apimanager instance'''
 
