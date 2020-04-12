@@ -24,19 +24,25 @@ block header
 						#navbarSupportedContent.collapse.navbar-collapse
 							ul.navbar-nav.mr-auto
 								li.nav-item.active
+								//a.nav-link(href='/')
+								//	| Home
+								//	span.sr-only (current)
 								a.nav-link(href='/')
-									| Home
-									span.sr-only (current)
+									| Join
+								a.nav-link(href='/users')
+									| Users
+								a.nav-link(href='/receptors')
+									| Receptors
 								li.nav-item
-								a.nav-link(href='https://github.com/cjmielke/quarantineAtHome/blob/master/README.md' target='_BLANK') Join
-								li.nav-item.dropdown
-								a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-									| Stats
-								.dropdown-menu(aria-labelledby='navbarDropdown')
-									a.dropdown-item(href='/users/') Top Users
-									a.dropdown-item(href='#') Best Hits
-									//.dropdown-divider
-									//a.dropdown-item(href='#') Something else here
+								//a.nav-link(href='https://github.com/cjmielke/quarantineAtHome/blob/master/README.md' target='_BLANK') Join
+								//li.nav-item.dropdown
+								//a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+								//	| Stats
+								//.dropdown-menu(aria-labelledby='navbarDropdown')
+								//	a.dropdown-item(href='/users/') Top Users
+								//	a.dropdown-item(href='#') Best Hits
+								//	//.dropdown-divider
+								//	//a.dropdown-item(href='#') Something else here
 								//li.nav-item
 								//a.nav-link.disabled(href='#') Disabled
 							//
