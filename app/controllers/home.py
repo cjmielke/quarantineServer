@@ -22,6 +22,7 @@ def myIP():
 
 
 def jobsTable(rows):
+
 	results = []
 	for r in rows:
 

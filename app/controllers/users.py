@@ -73,7 +73,6 @@ def index():
 @bp.route('/<int:userID>/')
 def showUser(userID):
 
-	# FIXME - this is eventually going to get slow - and will need to be replaced with a cronjob
 	query = text('''
 		select * from jobs
 		JOIN users USING(user)

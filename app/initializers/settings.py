@@ -59,3 +59,6 @@ DOCKING_ALGOS = {
 	'AD4-win': 'Autodock4-windows',
 	'AD4-osx': 'Autodock4-MacOS'
 }
+
+
+QUARANTINE_FILES = os.path.join(os.getcwd(), 'quarantine-files')
