@@ -91,13 +91,15 @@ def scan(args):
 
 
 def stats():
+	count=0
 	for key in DB:
 		zr = DB[key]  # type: ZincRecord
 		for f in zr.features: AllFeatures[f] += 1
-		print key, zr.features
+		#print key, zr.features
+		count+=1
 
 	print AllFeatures.most_common(50)
-
+	print count
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
