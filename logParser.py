@@ -38,7 +38,9 @@ def validateLogFile(fileName):
 	if gzMagic.startswith('gzip compressed data, was'):
 		fileMagic = magic.from_buffer(gzip.open(fileName).read(2048))
 		#print fileMagic
-		if fileMagic == 'ASCII text' or fileMagic == 'ASCII text, with CRLF line terminators':
+		terminators_ = ['ASCII text', 'ASCII text, with CRLF line terminators',
+		                'ASCII text, with CRLF, CR line terminators']
+		if fileMagic in terminators_:
 			return True
 		else:
 			print 'filemagic is not valid : ', fileMagic
