@@ -11,9 +11,6 @@ block content
 		.markdown img {
 			width: 50%;
 		}
-		.markdown {
-			border: 1px solid black;
-		}
 
 
 	br
@@ -28,15 +25,10 @@ block content
 			- if md
 				{{ md|markdown }}
 
-
-			- if mymd
-				.markdown.well
+			.markdown
+				- if mymd
 					{{ mymd }}
 
-				a(href='https://github.com/cjmielke/quarantine-files/tree/master/receptors/{{receptorName}}', target='GITHUB') See this system on Github
-
-			br
-			br
 			br
 			.row
 
@@ -46,11 +38,10 @@ block content
 
 
 				h4 Best ligands
-				br
-				br
 
 
 
+			.row
 				table.table
 					thead
 						tr

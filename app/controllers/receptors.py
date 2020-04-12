@@ -14,11 +14,27 @@ from app.util import safer
 
 bp = Blueprint('receptors', __name__, url_prefix='/receptors')
 
+def renderMarkdownFromGithub(mdFile, baseURL):
+	'''Opens markdown file stored in quarantine-files repository, parses it, and replaces image urls'''
+	md = open(mdFile).read()
 
-# TODO - finish later
+	MD = markdown.Markdown()
+	converted = MD.convert(md)
+
+	# super hacky way to rewrite relative links back to github pages  ....
+	converted = converted.replace('src="img', 'src="%simg' % baseURL)
+
+	return converted
+
+
 @bp.route('/')
 def index():
-	return render_template('receptors.html.jade', receptors=ALL_RECEPTORS)
+
+	mdFile = os.path.join(QUARANTINE_FILES, 'receptors', 'README.md')
+	baseURL = 'https://cjmielke.github.io/quarantine-files/receptors/'
+	converted = renderMarkdownFromGithub(mdFile, baseURL)
+
+	return render_template('receptors.html.jade', mymd=converted)
 
 
 
@@ -27,16 +43,12 @@ def showReceptor(receptorName):
 
 	if receptorName not in ALL_RECEPTORS: return 'No receptor with this definition', 404
 
-
 	receptorDir = os.path.join(QUARANTINE_FILES, 'receptors', receptorName)
-	md = open( os.path.join(receptorDir, 'README.md') ).read()
+	mdFile = os.path.join(receptorDir, 'README.md')
 
-	MD = markdown.Markdown()
-	converted = MD.convert(md)
+	baseURL = 'https://cjmielke.github.io/quarantine-files/receptors/%s/' % receptorName
 
-	# super hacky way to rewrite relative links back to github pages  ....
-	ghPages = 'https://cjmielke.github.io/quarantine-files/receptors/%s/' % receptorName
-	converted = converted.replace('src="img', 'src="%simg'%ghPages)
+	converted = renderMarkdownFromGithub(mdFile, baseURL)
 
 	md=None         # don't let flask-markdown handle this
 
