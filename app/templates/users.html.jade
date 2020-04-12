@@ -1,0 +1,47 @@
+extends base.html.jade
+
+block title
+	title Quarantine@Home
+
+block content
+
+	br
+	br
+	br
+
+	.body-wrapper
+		.container
+
+			br
+			.row
+
+				h4 Users (in no particular order)
+				br
+
+				table.table
+					thead
+						tr
+							- for k in cols
+								th(scope='col') {{k}}
+					tbody
+						- for r in results
+							tr
+								- for c in r
+									td {{c}}
+
+			.row
+				.col-sm-6.col-md-6.col.lg-6
+
+				//
+					.col-sm-6.col-md-6.col.lg-6
+						.title-block.clearfix
+							h2 Quarantine@Home
+							img(src='',style='height:170px;float:right')
+
+
+
+
+
+		.space-sep
+		.space-sep
+

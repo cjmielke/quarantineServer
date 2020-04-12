@@ -20,6 +20,36 @@ def myIP():
 	return str(ip)
 
 
+
+def jobsTable(rows):
+	results = []
+	for r in rows:
+
+		if r.username:
+			userName = safer(r.username)
+			userDisp = "<a href='/users/%s/'>%s</a>" % (r.user, userName)
+		else: userDisp=''
+
+
+		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
+
+		if r.receptor not in ALL_RECEPTORS: continue			# defense against injection
+
+		if r.uploaded: resultsLink = "<a target='BLANK' href='/view/%s/'>Results</a>" % (r.jobID)
+		else: resultsLink = ''
+
+		results.append((
+			r.jobID,
+			userDisp,
+			#zinc,
+			"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zinc, zinc),
+			"<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (r.receptor, r.receptor),
+			r.bestDG,
+			resultsLink
+		))
+
+	return results
+
 # FIXME - Make a homepage later .... with a table of best results
 @bp.route('/')
 def index():
@@ -36,28 +66,7 @@ def index():
 	#return jsonify(**response)
 	print 'columns :', rows.keys()
 
-	results = []
-	for r in rows:
-		print r
-		user = r.username or ''
-		user = safer(user)
-
-		zinc = 'ZINC'+str(r.zincID).rjust(12, '0')
-
-		if r.receptor not in ALL_RECEPTORS: continue			# defense against injection
-
-		if r.uploaded: resultsLink = "<a target='BLANK' href='/view/%s/'>Results</a>" % (r.jobID)
-		else: resultsLink = ''
-
-		results.append((
-			r.jobID,
-			user,
-			#zinc,
-			"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zinc, zinc),
-			"<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (r.receptor, r.receptor),
-			r.bestDG,
-			resultsLink
-		))
+	results = jobsTable(rows)
 
 
 	#result = db.engine.execute(sql, user=user)
@@ -66,27 +75,6 @@ def index():
 	return render_template('home.html.jade', results=results)
 
 
-
-
-
-'''
-
-def getBestFaces(userID, N=10):
-	engine = sqlAlchemyCon()
-	sql = text('SELECT * FROM faces WHERE user=:user ORDER BY faceScore DESC LIMIT :limit')
-
-	res = engine.execute(sql, user=userID, limit=N)
-
-	lis = []
-	for index, row in enumerate(res):
-		#print row
-		# FIXME - In the future we need to handle other non-facebook image sources
-		imgFile = os.path.join(FACEBOOK_PROFILE_IMAGES, row.imgfile)
-		lis.append((row.face, imgFile))
-
-	return lis
-
-'''
 
 
 

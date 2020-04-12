@@ -49,4 +49,13 @@ LOCAL_ZINC = os.path.join(os.getcwd(), 'ZINCDB')
 RESULTS_STORAGE = os.path.join(os.getcwd(), 'DLG')
 RESULTS_HOSTING = os.path.join(STATIC_FOLDER, 'results')
 
-DOCKING_ALGOS = ['AD4', 'AD-gpu', 'AD-vina', 'AD-win', 'AD4-win', 'AD4-osx']
+#DOCKING_ALGOS = ['AD4', 'AD-gpu', 'AD-vina', 'AD-win', 'AD4-win', 'AD4-osx']
+
+DOCKING_ALGOS = {
+	'AD4': 'Autodock4-Linux',
+	'AD-gpu': 'Autodock4-linux-GPU',
+	'AD-vina': 'Autodock Vina',
+	'AD-win': 'Autodock4-windows',
+	'AD4-win': 'Autodock4-windows',
+	'AD4-osx': 'Autodock4-MacOS'
+}
