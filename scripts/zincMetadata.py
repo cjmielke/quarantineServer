@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 import argparse
 import glob
+import gzip
 import os
 import shelve
 from collections import Counter
@@ -11,6 +12,7 @@ from collections import Counter
 
 
 # gonna just cram into a python shelve database for now
+import tqdm as tqdm
 
 DB = shelve.open('ZincMetadata.shelve')
 
@@ -24,7 +26,7 @@ class ZincRecord():
 def processFile(f):
 
 	header = f.readline()
-	print 'Header : ', header
+	#print 'Header : ', header
 	'''
 	0:smiles
 	1:zinc_id
@@ -67,21 +69,22 @@ def processFile(f):
 
 def scan(args):
 
-	for txtFile in glob.iglob(args.dir+'/*/*/??????.txt'):
-		print txtFile
+	pbar = tqdm.tqdm(total=39466)       # determined on commandline after rsyncing ....
 
+	for txtFile in glob.iglob(args.dir+'/*/*/??????.txt.gz'):
 		path, filename = os.path.split(txtFile)
+		#print txtFile
+		#print path, filename
 
-		print path, filename
+		tranche = filename.replace('.txt.gz', '')
 
-		tranche = filename.replace('.txt', '')
-
-		with open(txtFile, 'r') as f:
-			processFile(f)
-
-		print AllFeatures.most_common(50)
+		try:
+			with gzip.open(txtFile, 'r') as f:
+				processFile(f)
+		except: continue
 
 		DB.sync()
+		pbar.update()
 
 	DB.close()
 
