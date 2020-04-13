@@ -162,6 +162,8 @@ def scan(args):
 						process3Dfile(f)
 					elif '/3D' in txtFile:
 						process3Dfile(f)
+					else:
+						raise ValueError('No parsers for ' + txtFile)
 			except Exception as e:
 				print e
 
