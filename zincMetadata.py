@@ -134,7 +134,6 @@ def process3Dfile(f):
 				s = LigandSubset(zinc=zincID, subset=subsets[f])
 				db.session.merge(s)
 
-		db.session.commit()     # after every file
 
 
 
@@ -154,7 +153,7 @@ def scan(args):
 	with App.app_context():
 		db.create_all()
 
-
+		count=0
 		for txtFile in glob.iglob(args.dir+'/*/*/??????.txt.gz'):
 			path, filename = os.path.split(txtFile)
 			#print txtFile
@@ -167,8 +166,13 @@ def scan(args):
 				else: process3Dfile(f)
 
 			pbar.update()
+			count+=1
 
+			if count%100==0:
+				print count
+				db.session.commit()  # after every N files
 
+		db.session.commit()     # finish
 
 
 def stats():
