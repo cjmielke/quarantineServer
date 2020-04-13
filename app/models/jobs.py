@@ -1,6 +1,6 @@
 import datetime
 
-
+from app.core import app
 from . import db
 
 class User(db.Model):
@@ -8,6 +8,37 @@ class User(db.Model):
 	__tablename__ = 'users'
 	user = db.Column('user', db.Integer, primary_key = True)
 	username = db.Column('username', db.String(16))
+
+
+
+# if encrypting the userID is desired, here is a clean way to do it with Blowfish
+
+
+from Crypto.Cipher import Blowfish
+from Crypto.Util.number import bytes_to_long, long_to_bytes
+
+
+if app.debug:
+	from app.initializers.settings import BLOWFISH_KEY
+	print 'DEV MODE - USING FAKE BLOWFISH KEY'
+else:
+	from app.initializers.secrets import BLOWFISH_KEY
+
+c1  = Blowfish.new(BLOWFISH_KEY, Blowfish.MODE_ECB)
+
+
+
+# the following work on long integer representations of IPv4 addresses
+
+def encryptIP(ipInt):
+	enc = bytes_to_long(c1.encrypt(long_to_bytes(ipInt, blocksize=8)))
+	return enc
+
+def decryptIP(enc):
+	dec=bytes_to_long(c1.decrypt(long_to_bytes(enc, blocksize=8)))
+	return dec
+
+
 
 
 class Job(db.Model):
@@ -38,6 +69,8 @@ class Job(db.Model):
 	uploaded = db.Column('uploaded', db.Boolean, index=True)
 
 
+
+
 def getJob(id):
 	# type: (int) -> Job
 	job = Job.query.get(int(id))
@@ -57,26 +90,5 @@ class Result(db.Model):
 	pose = db.Column('pose', db.Integer, primary_key = True)
 
 	energy = db.Column('energy', db.Float, index=True)
-
-
-def testModels():
-
-	test_user = 'testUser'
-
-	user = User.query.filter(User.username == test_user).first()
-	print user
-	if not user:
-		user = User()
-		user.username = test_user
-		db.session.add(user)
-		db.session.commit()
-
-	j = Job()
-	j.user = user.user
-	j.bestDG = -7
-	j.zincID = 10
-
-	db.session.add(j)
-	db.session.commit()
 
 
