@@ -4,6 +4,7 @@ import datetime
 from . import db
 
 
+# FIXME - wish I called this "TranchFile" ...... unique tranche codes are split into several files when they are big!
 class Tranche(db.Model):
 
 	__tablename__ = 'tranches'

@@ -35,13 +35,13 @@ class Ligand(db.Model):
 
 class LigandSubset(db.Model):
 	__tablename__ = 'zincToSubset'
-	zinc = Column(INTEGER(unsigned=True), primary_key=True, index=True)
+	zincID = Column(INTEGER(unsigned=True), primary_key=True, index=True)
 	subset = Column(Integer, primary_key=True)
 
 class Subset(db.Model):
 	__tablename__ = 'zincSubsets'
 	subset = Column(Integer, primary_key=True)
-	name = Column(String(16), unique=True)
+	subsetName = Column(String(16), unique=True)
 
 
 
@@ -49,10 +49,10 @@ class Subset(db.Model):
 def getSubset(name):
 	# type: (str) -> Subset
 	#subset = Subset.query.get(Subset.name==name)
-	subset = Subset.query.filter(Subset.name==name).first()
+	subset = Subset.query.filter(Subset.subsetName == name).first()
 
 	if subset is None:
-		subset = Subset(name=name)
+		subset = Subset(subsetName=name)
 		db.session.add(subset)
 		db.session.commit()
 

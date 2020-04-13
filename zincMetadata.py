@@ -107,6 +107,7 @@ def process3Dfile(f):
 
 		# print zincID, smiles
 		features = cols[11].split(',')
+		features = [f for f in features if len(f)]          # ignore empty string .... sigh ....
 
 		for name in features:
 			AllFeatures[name] += 1
@@ -131,7 +132,7 @@ def process3Dfile(f):
 			#ins = text('INSERT IGNORE INTO zincToSubset () VALUES ()')
 			#db.cursor.execut(ins)
 			for f in features:
-				s = LigandSubset(zinc=zincID, subset=subsets[f])
+				s = LigandSubset(zincID=zincID, subset=subsets[f])
 				db.session.merge(s)
 
 

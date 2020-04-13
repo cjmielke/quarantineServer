@@ -55,11 +55,12 @@ def jobsTable(rows):
 @bp.route('/')
 def index():
 
-	query = text('''SELECT * FROM jobs
+	query = text('''
+		SELECT * FROM jobs
 		LEFT JOIN users USING(user)
 		order by bestDG
-		LIMIT 50;'''
-	)
+		LIMIT 50
+	;''')
 
 	rows = db.engine.execute(query)
 	#friendDevices = [{'api':r[0], 'url':r[1], 'name':r[2], 'fbid':r[3]} for r in rows]
