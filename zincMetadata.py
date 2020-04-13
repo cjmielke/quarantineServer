@@ -106,7 +106,13 @@ def process3Dfile(f):
 
 
 		# print zincID, smiles
-		features = cols[11].split(' ')
+		features = cols[11].split(',')
+
+		for name in features:
+			AllFeatures[name] += 1
+			if name not in subsets:
+				S = getSubset(name)
+				subsets[name]=S.subset
 
 
 		if len(features):           # only storing zincID's present in special subsets for now
@@ -120,13 +126,13 @@ def process3Dfile(f):
 			ligand.weight = cols[7]
 			ligand.logP = cols[8]
 			ligand.trancheName = cols[12]
-			db.session.add (ligand)
+			db.session.merge (ligand)
 
 			#ins = text('INSERT IGNORE INTO zincToSubset () VALUES ()')
 			#db.cursor.execut(ins)
 			for f in features:
 				s = LigandSubset(zinc=zincID, subset=subsets[f])
-				db.session.add(s)
+				db.session.merge(s)
 
 		db.session.commit()     # after every file
 
@@ -156,14 +162,9 @@ def scan(args):
 
 			tranche = filename.replace('.txt.gz', '')
 
-			try:
-				with gzip.open(txtFile, 'r') as f:
-					if '/special/' in txtFile:
-						process3Dfile(f)
-					else:
-						process3Dfile(f)
-			except Exception as e:
-				print e
+			with gzip.open(txtFile, 'r') as f:
+				if '/special/' in txtFile: processSpecialFile(f)
+				else: process3Dfile(f)
 
 			pbar.update()
 

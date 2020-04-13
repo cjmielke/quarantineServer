@@ -48,11 +48,12 @@ class Subset(db.Model):
 
 def getSubset(name):
 	# type: (str) -> Subset
-	subset = Subset.query.get(Subset.name==name)
+	#subset = Subset.query.get(Subset.name==name)
+	subset = Subset.query.filter(Subset.name==name).first()
 
-	if not subset:
-		s = Subset(name=name)
-		db.session.add(s)
+	if subset is None:
+		subset = Subset(name=name)
+		db.session.add(subset)
 		db.session.commit()
 
 	return subset
