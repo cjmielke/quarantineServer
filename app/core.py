@@ -9,6 +9,7 @@ from pyjade.ext.jinja import PyJadeExtension
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
+from flaskext.markdown import Markdown
 
 # from app.auth import loginManagerSetup
 
@@ -70,7 +71,6 @@ def create_app(debug):
 		db.create_all()
 
 
-	from flaskext.markdown import Markdown
 	Markdown(app)
 
 	return app
