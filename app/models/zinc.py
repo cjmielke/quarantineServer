@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, Column, Float
+from sqlalchemy import Integer, String, Column, Float, Text
 from sqlalchemy.dialects.mysql import INTEGER
 
 from . import db
@@ -12,9 +12,9 @@ class Ligand(db.Model):
 
 	protID = Column(Integer)
 
-	name = Column(String)
-	smiles = Column(String)
-	InChI = Column(String)
+	#name = Column(String)
+	smiles = Column(Text)
+	InChI = Column(Text)
 
 	weight = Column(Float)
 	ph = Column(Integer)
@@ -41,7 +41,7 @@ class LigandSubset(db.Model):
 class Subset(db.Model):
 	__tablename__ = 'zincSubsets'
 	subset = Column(Integer, primary_key=True)
-	name = Column(String, unique=True)
+	name = Column(String(16), unique=True)
 
 
 
