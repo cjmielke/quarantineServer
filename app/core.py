@@ -9,7 +9,7 @@ from pyjade.ext.jinja import PyJadeExtension
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
-#from flaskext.markdown import Markdown
+#from flaskext.markdown import Markdown             # not working anymore!!!! refuses to import on server!
 
 # from app.auth import loginManagerSetup
 
@@ -71,7 +71,7 @@ def create_app(debug):
 		db.create_all()
 
 
-	#Markdown(app)
+	#Markdown(app)              # doesn't work anymore!!!
 
 	return app
 
