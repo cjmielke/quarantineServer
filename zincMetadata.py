@@ -162,7 +162,8 @@ def scan(args):
 						process3Dfile(f)
 					elif '/3D' in txtFile:
 						process3Dfile(f)
-			except: continue
+			except Exception as e:
+				print e
 
 			pbar.update()
 
@@ -189,6 +190,8 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 
 	if args.dir:
+		if not os.path.exists(args.dir):
+			raise ValueError('No directory found at ', args.dir)
 		scan(args)
 
 	if args.stats:
