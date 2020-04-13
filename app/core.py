@@ -9,7 +9,6 @@ from pyjade.ext.jinja import PyJadeExtension
 from app.initializers import settings
 from app.initializers.assets import init_assets
 from app.models import db
-from app.models.jobs import testModels
 
 # from app.auth import loginManagerSetup
 
@@ -70,8 +69,6 @@ def create_app(debug):
 	with app.app_context():
 		db.create_all()
 
-		if debug:
-			testModels()
 
 	from flaskext.markdown import Markdown
 	Markdown(app)

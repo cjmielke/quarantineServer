@@ -19,3 +19,5 @@ python-magic
 simplejson
 flask-markdown
 tqdm
+crypto==1.4.1
+pycrypto==2.6.1

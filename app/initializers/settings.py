@@ -62,3 +62,11 @@ DOCKING_ALGOS = {
 
 
 QUARANTINE_FILES = os.path.join(os.getcwd(), 'quarantine-files')
+
+# key used for encrypting IP addresses of clients
+# if app is running in production mode, this is imported from secrets.py
+BLOWFISH_KEY = 'FAKE_KEY'
+
+
+
+
