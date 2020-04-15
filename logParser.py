@@ -6,7 +6,7 @@ import os
 import shutil
 
 from app.initializers.settings import RESULTS_HOSTING
-from app.models import db
+from app.models import db, printSchema
 from app.models.jobs import Job, getJob
 
 '''
@@ -108,7 +108,8 @@ def scanAndInsert():
 			p.saveTrajectory(outFile)
 
 			# move logfile to hosting area so researchers can download it
-			shutil.move(filePath, RESULTS_HOSTING)
+			dst = os.path.join(RESULTS_HOSTING, fileName)
+			shutil.move(filePath, dst)
 
 			# nah
 			#r = Result()
@@ -116,17 +117,6 @@ def scanAndInsert():
 
 			job.uploaded = True
 			db.session.commit()
-
-
-
-
-
-
-def printSchema(model):
-	# Neat trick to print the create table syntax that would be sent to the server
-	from sqlalchemy.schema import CreateTable
-	#model = Results
-	print(CreateTable(model.__table__))
 
 
 if __name__ == "__main__":
