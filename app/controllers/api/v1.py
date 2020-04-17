@@ -133,7 +133,6 @@ def randomSubsetTranche(subset):
 	return rows
 
 
-
 @bp.route('/tranche/get')
 def assignTranche():
 	'''
@@ -145,11 +144,7 @@ def assignTranche():
 
 	#'ABCDEFGHIJK'
 
-	#if random.random() < 0.3:                       # moonshot - pull from the "everything" subset
 	rows = random3DTranche()
-	#else:                                           # pick instead from annotated subsets, fda cleared, etc
-	#	subset = random.choice(['fda'])
-	#	rows = randomSubsetTranche(subset)
 
 	rows = [r for r in rows]
 	selection = random.choice(rows)
@@ -168,8 +163,11 @@ def assignTranche():
 @bp.route('/tranche/getspecial')
 def assignTrancheSpecial():
 
-	subset = random.choice(['fda','world','in-vivo'])
-	rows = randomSubsetTranche(subset)
+	if random.random() < 0.3:                       # moonshot - pull from the "everything" subset
+		rows = random3DTranche()
+	else:                                           # pick instead from annotated subsets, fda cleared, etc
+		subset = random.choice(['fda', 'world', 'in-vivo'])
+		rows = randomSubsetTranche(subset)
 
 	rows = [r for r in rows]
 	selection = random.choice(rows)
