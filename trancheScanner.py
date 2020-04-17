@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-production', action='store_true')
 parser.add_argument('-scan', action='store_true')
 parser.add_argument('-load', action='store_true')
+parser.add_argument('-special', action='store_true')
 args = parser.parse_args()
 
 debug = True
@@ -43,8 +44,21 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 
 #@click.command(name='db-init-data')
 #@with_appcontext
-def loadTranches():
-	"""Init db with some data"""
+
+
+'''
+ZINC-downloader-3D-pdbqt.gz.uri    file looks like this 
+......
+http://files.docking.org/3D/AA/AAMM/AAAAMM.xaa.pdbqt.gz
+http://files.docking.org/3D/AA/AAMN/AAAAMN.xaa.pdbqt.gz
+http://files.docking.org/3D/AA/AAMO/AAAAMO.xaa.pdbqt.gz
+http://files.docking.org/3D/AA/AAMP/AAAAMP.xaa.pdbqt.gz
+'''
+
+
+
+def load3DTranches():
+	""" Init db with information on tranches - tested with full 3D set only """
 
 	from app.core import create_app
 
@@ -83,9 +97,80 @@ def loadTranches():
 			db.session.commit()	# faster out of loop
 
 
+def loadSpecialTranches():
+	"""
+	decided to make this a seperate method to avoid making a mistake on production DB
+
+	This was a cheap way to convert wget-d zincDB special directories :p
+
+	find files.docking.org/special/ | grep pdbqt.gz > ~/specialTranches.txt
+	 ....
+	files.docking.org/special/current/fda/tranches/AJ/xaaa-AJ.ref.pdbqt.gz
+	files.docking.org/special/current/fda/tranches/AJ/xaaa-AJ.mid.pdbqt.gz
+	files.docking.org/special/current/fda/tranches/AB/xaaa-AB.ref.pdbqt.gz
+	files.docking.org/special/current/fda/tranches/AB/xaaa-AB.mid.pdbqt.gz
+
+	"""
+
+	from app.core import create_app
+
+	app = create_app(debug=debug)
+
+	with app.app_context():
+		db.create_all()
+
+		with open('specialTranches.txt', 'r') as tracheList:
+			for line in tracheList:
+				assert 'special' in line
+
+				line=line.rstrip()
+				urlPath = line.replace('files.docking.org/', '')        # no http:// as before in the 3D tranche importer
+
+				dirs = urlPath.split('/')
+				fileName = dirs[-1]
+
+				print line, urlPath, fileName
+
+				assert dirs[0]=='special'
+				# skipping dirs[1] which is usually 'current'
+				subset = dirs[2]
+				assert subset != '3D'
+
+				t = Tranche()
+				t.urlPath = urlPath
+				t.fileName = fileName
+
+				t.lastAssigned=0
+				t.loopCount=0
+				t.ligandCount=None		# unknown until we figure it out
+
+				# not true anymore
+				#t.weight = fileName[0]
+				#t.logP = fileName[1]
+				#t.reactivity = fileName[2]
+				#t.purchasibility = fileName[3]
+				#t.pH = fileName[4]
+				#t.charge = fileName[5]
+
+				# the first two tranche divisons appear to be stored in the last subdir
+				weightLogP = dirs[-2]
+				t.weight = weightLogP[0]
+				t.logP = weightLogP[1]
+
+				t.subset = subset
+
+
+
+				print t
+				db.session.add(t)
+			db.session.commit()	# faster out of loop
 
 
 def findLocalTranches():
+	'''
+	This finds tranche files on the webserver and marks them as being available for alternate download
+	We don't need this yet, unless ZINC gets overloaded and wants us to offload bandwidth
+	'''
 	from app.core import create_app
 
 	app = create_app(debug=debug)
@@ -115,7 +200,10 @@ def findLocalTranches():
 
 if __name__ == "__main__":
 	if args.load:
-		loadTranches()
+		load3DTranches()
+
+	if args.special:
+		loadSpecialTranches()
 
 	if args.scan:
 		findLocalTranches()

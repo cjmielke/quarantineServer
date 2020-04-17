@@ -115,6 +115,7 @@ def assignTranche():
 		AND charge in ('N','M','O');
 	''')
 
+	# NOTE - no limitation whatsoever on logP - only really limiting purchasibility, pH, and extreme charge states
 	query = text('''
 		SELECT * from tranches
 		WHERE weight in ('A','B','C','D','E','F','G','H','I','J','K')
@@ -163,7 +164,8 @@ def getTrancheJob(trancheID):
 def TrancheEOF(trancheID):
 	tranche = getTranche(trancheID)
 	print tranche.lastAssigned
-	tranche.lastAssigned -= 1
+	#tranche.lastAssigned -= 1
+	tranche.lastAssigned = 0        # really should just reset from now on, especially with smaller subsets!
 	tranche.loopCount += 1
 	db.session.commit()
 	return jsonify(**dict(status='ok'))
