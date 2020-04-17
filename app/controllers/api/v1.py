@@ -82,17 +82,7 @@ assigner = TrancheModels()			# single object shared among all threads
 
 
 
-
-@bp.route('/tranche/get')
-def assignTranche():
-	'''
-	Picks a random tranche file, and reports back to client
-	Client will then download this file, and for the duration of its runtime process ligands from it until exhaustion
-	This minimizes bandwidth usage on the ZINC server, or any mirrors that may be created
-	'''
-	#rt = random.choice(tranches)
-
-	#'ABCDEFGHIJK'
+def random3DTranche():
 	weights = "'A','B','C','D','E','F','G','H','I','J','K'"
 	logPs = "'A','B','C','D','E','F','G','H','I','J','K'"
 
@@ -127,16 +117,64 @@ def assignTranche():
 	''')
 
 	rows = db.engine.execute(query)
+
+	return rows
+
+
+def randomSubsetTranche(subset):
+
+	query = text('''
+		SELECT * from tranches
+		WHERE subset=:subset
+	''')
+
+	rows = db.engine.execute(query, subset=subset)
+
+	return rows
+
+
+
+@bp.route('/tranche/get')
+def assignTranche():
+	'''
+	Picks a random tranche file, and reports back to client
+	Client will then download this file, and for the duration of its runtime process ligands from it until exhaustion
+	This minimizes bandwidth usage on the ZINC server, or any mirrors that may be created
+	'''
+	#rt = random.choice(tranches)
+
+	#'ABCDEFGHIJK'
+
+	#if random.random() < 0.3:                       # moonshot - pull from the "everything" subset
+	rows = random3DTranche()
+	#else:                                           # pick instead from annotated subsets, fda cleared, etc
+	#	subset = random.choice(['fda'])
+	#	rows = randomSubsetTranche(subset)
+
 	rows = [r for r in rows]
-	print 'tranches selected : ', len(rows)
 	selection = random.choice(rows)
 
 	response = dict(tranche=selection.urlPath, id=selection.trancheID)
 
+	# disabling mirror support for now   - this wasn't even the right implementation!
 	# does the server have a local cached copy?
-	localPath = os.path.join(LOCAL_ZINC, selection.urlPath)
-	if os.path.exists(localPath):
-		response['mirror'] = 'https://quarantine.infino.me/ligands/'
+	#localPath = os.path.join(LOCAL_ZINC, selection.urlPath)
+	#if os.path.exists(localPath):
+	#	response['mirror'] = 'https://quarantine.infino.me/ligands/'
+
+	return jsonify(**response)
+
+# testing here for now
+@bp.route('/tranche/getspecial')
+def assignTrancheSpecial():
+
+	subset = random.choice(['fda','world','in-vivo'])
+	rows = randomSubsetTranche(subset)
+
+	rows = [r for r in rows]
+	selection = random.choice(rows)
+
+	response = dict(tranche=selection.urlPath, id=selection.trancheID)
 
 	return jsonify(**response)
 
