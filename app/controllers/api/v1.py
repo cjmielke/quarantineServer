@@ -163,7 +163,8 @@ def assignTranche():
 @bp.route('/tranche/getspecial')
 def assignTrancheSpecial():
 
-	if random.random() < 0.3:                       # moonshot - pull from the "everything" subset
+	# disabled moonshots for now
+	if random.random() < 0.0:                       # moonshot - pull from the "everything" subset
 		rows = random3DTranche()
 	else:                                           # pick instead from annotated subsets, fda cleared, etc
 		subset = random.choice(['fda', 'world', 'in-vivo'])
