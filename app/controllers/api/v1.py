@@ -168,6 +168,7 @@ def assignTrancheSpecial():
 		rows = random3DTranche()
 	else:                                           # pick instead from annotated subsets, fda cleared, etc
 		subset = random.choice(['fda', 'world', 'in-vivo'])
+		subset = random.choice(['fda'])
 		rows = randomSubsetTranche(subset)
 
 	rows = [r for r in rows]
