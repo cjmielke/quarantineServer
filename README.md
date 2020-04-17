@@ -12,11 +12,11 @@ To run :
   
 
 ### Todo
-[] work on data exports - need to find best way to remove ip address column : https://stackoverflow.com/questions/15264597/how-to-take-mysql-dump-of-selected-columns-of-a-table
+- [ ] work on data exports - need to find best way to remove ip address column : https://stackoverflow.com/questions/15264597/how-to-take-mysql-dump-of-selected-columns-of-a-table
 
-[] define indexes for sql schema
+- [ ] define indexes for sql schema
 
-[] create a docker-compose file to orchestrate this along with a containerized mysql, as well as a sentry server for remote error collection
+- [ ] create a docker-compose file to orchestrate this along with a containerized mysql, as well as a sentry server for remote error collection
 
 
 
