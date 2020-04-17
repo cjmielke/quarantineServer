@@ -12,11 +12,17 @@ To run :
   
 
 ### Todo
+- [ ] import subset'ed tranches into sql and assign them preferrentially
+- [ ] expose ligand metadata in frontend
+- [ ] results viz improvements - template and JS configs
+- [ ] SMILES rendering
+- [ ] query caching https://flask-caching.readthedocs.io/en/latest/
+- [ ] stats page with common queries and caching 
+- [ ] work on data exports - need to find best way to remove ip address column : https://stackoverflow.com/questions/15264597/how-to-take-mysql-dump-of-selected-columns-of-a-table
 
-* make a simple results page for public consumption
-* define indexes for sql schema
+- [ ] more indexes for sql schema
 
-* create a docker-compose file to orchestrate this along with a containerized mysql, as well as a sentry server for remote error collection
+- [ ] create a docker-compose file to orchestrate this along with a containerized mysql, as well as a sentry server for remote error collection
 
 
 
