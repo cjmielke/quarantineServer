@@ -28,7 +28,7 @@ loadDockingResults = (receptor, trajectory) ->
 	stage = document.stageReceptor
 	stage.removeAllComponents()
 	# Code for example: interactive/annotation
-	mol='/static/receptors/'+receptor+'/receptor.pdbqt'
+	mol='/static/receptors/'+receptor+'/receptor.pdbqt.gz'
 	stage.loadFile(mol).then (o) ->
 		#o.addRepresentation 'cartoon', color: 'sstruc'
 		o.addRepresentation 'cartoon', color: 'residueindex'

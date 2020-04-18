@@ -104,8 +104,8 @@ def scanAndInsert():
 			#if not os.path.exists(outPath): os.makedirs(outPath)
 			#outFile = os.path.join(outPath, 'trajectory')
 			#outFile = os.path.join(RESULTS_HOSTING, '%d.traj.pdbqt' % jobID)
-			outFile = os.path.join(RESULTS_HOSTING, '%d.traj.pdbqt' % jobID)
-			p.saveTrajectory(outFile)
+			outFile = os.path.join(RESULTS_HOSTING, '%d.traj.pdbqt.gz' % jobID)
+			p.saveTrajectory(outFile, compress=True)
 
 			# move logfile to hosting area so researchers can download it
 			dst = os.path.join(RESULTS_HOSTING, fileName)

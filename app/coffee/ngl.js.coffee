@@ -13,86 +13,32 @@ receptorOrientations =
 
 
 
-loadPoseTrajectory = (jobID) ->
-	stage = document.stage
 
-	# Code for example: interactive/interpolate
-	#mol='/static/receptors/mpro-1/poses.pdbqt'
-	#mol='/static/52.traj.pdbqt'
-	mol='/static/results/'+jobID+'.traj.pdbqt'
+loadPoseTrajectory = (stage, mol) ->
 	stage.loadFile(mol, asTrajectory: true).then (o) ->
 		traj = o.addTrajectory().trajectory
 		player = new (NGL.TrajectoryPlayer)(traj,
 			step: 1						# how many frames to skip when playing
-			timeout: 100				# how many milliseconds to wait between playing frames
-			interpolateStep: 5			#
+			timeout: 800				# how many milliseconds to wait between playing frames
+			interpolateStep: 10			#
 			start: 0					# first frame to play
-			end: traj.numframes
+			end: Math.min(traj.frameCount,2)
 			#interpolateType: 'linear'	# linear or spline
 			interpolateType: 'spline'
 			mode: 'loop'				# either "loop" or "once"
 			direction: 'bounce')		# either "forward", "backward" or "bounce"
+		console.log 'trajframes', Math.min(traj.frameCount,2)
 		player.play()
-		o.addRepresentation 'ball+stick'
-		o.addRepresentation 'licorice'
+		o.addRepresentation 'ball+stick', color: 'partialCharge'
+		#o.addRepresentation 'licorice'
 		#o.addRepresentation 'spacefill', opacity: 0.6
 		#o.autoView()
 		return
 
 
-loadPose = () ->
-	stage = document.stage
-
-	mol='/static/receptors/mpro-1/pose0.pdbqt'
-	stage.loadFile(mol).then (o) ->
-		rep = 'ball+stick'
-		rep = 'spacefill'
-		o.addRepresentation rep #, color: ''
-		#o.addRepresentation 'cartoon'
-
-		###
-		chainData =
-			'A':
-				text: 'alpha subunit'
-				color: 'firebrick'
-			'B':
-				text: 'beta subunit'
-				color: 'orange'
-			'G':
-				text: 'gamma subunit'
-				color: 'khaki'
-			'R':
-				text: 'beta 2 adrenergic receptor'
-				color: 'skyblue'
-			'N':
-				text: 'nanobody'
-				color: 'royalblue'
-
-		ap = o.structure.getAtomProxy()
 
 
-		o.structure.eachChain ((cp) ->
-			ap.index = cp.atomOffset + Math.floor(cp.atomCount / 2)
-			elm = document.createElement('div')
-			elm.innerText = chainData[cp.chainname].text
-			elm.style.color = 'black'
-			elm.style.backgroundColor = chainData[cp.chainname].color
-			elm.style.padding = '8px'
-			o.addAnnotation ap.positionToVector3(), elm
-			return
-		), new (NGL.Selection)('polymer')
-		###
-
-		o.autoView()
-		pa = o.structure.getPrincipalAxes()
-		q = pa.getRotationQuaternion()
-		q.multiply o.quaternion.clone().inverse()
-		stage.animationControls.rotate q, 0
-		stage.animationControls.move o.getCenter(), 0
-		return
-
-
-loadDockingResults = (receptor, jobID) ->
+OLDloadDockingResults = (receptor, jobID) ->
 	stage = document.stage
 
 	# Code for example: interactive/annotation
@@ -137,7 +83,7 @@ loadDockingResults = (receptor, jobID) ->
 		###
 
 		#loadPose()
-		loadPoseTrajectory(jobID)
+		loadPoseTrajectory(jobID, stage)
 
 		#return
 		#o.autoView()
@@ -160,21 +106,41 @@ loadDockingResults = (receptor, jobID) ->
 #loadReceptor('mpro-1')
 
 
+loadDockingResults = (receptor, trajectory) ->
+	stage = document.stage
+	stage.removeAllComponents()
+	# Code for example: interactive/annotation
+	mol='/static/receptors/'+receptor+'/receptor.pdbqt'
+	stage.loadFile(mol).then (o) ->
+		#o.addRepresentation 'cartoon', color: 'sstruc'
+		o.addRepresentation 'cartoon', color: 'residueindex'
+		#o.addRepresentation 'cartoon', defaultRepresentation: true
+		#o.addRepresentation 'spacefill', color: 'resname', opacity: 0.5
+		o.addRepresentation 'surface', color: 'resname', opacity: 0.5
+		#o.addRepresentation 'surface', color: 'chain', opacity: 0.4
+		#o.addRepresentation 'cartoon'
+
+		#loadPose()
+		loadPoseTrajectory(stage, trajectory)
+		root.setReceptorOrientation receptor, stage
+
+
 #$(document).ready ->
 document.addEventListener 'DOMContentLoaded', ->
 
 	if $('#viewport').length
 
 
-		document.stage = new (NGL.Stage)('viewport')
+		document.stage = new (NGL.Stage)('viewport', { backgroundColor: "white" })
 		# Handle window resizing
 		window.addEventListener 'resize', ((event) ->
 			#stage.handleResize()
 			return
 		), false
 
+		poses = '/static/results/'+document.jobID+'.traj.pdbqt'
 
-		loadDockingResults(document.receptor, document.jobID)
+		loadDockingResults(document.receptor, poses)
 
 
 #loadDockingResults = (receptor, jobID) ->

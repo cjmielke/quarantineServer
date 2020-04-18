@@ -4,8 +4,7 @@ from flask import Blueprint, render_template, request
 from ipaddress import ip_address
 from sqlalchemy import text
 
-from app.controllers import add_blueprint
-from app.controllers.home import jobsTable
+from app.controllers import add_blueprint, jobsTable
 from app.initializers.settings import ALL_RECEPTORS, DOCKING_ALGOS
 from app.models import db
 from app.util import safer
