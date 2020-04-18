@@ -138,7 +138,7 @@ document.addEventListener 'DOMContentLoaded', ->
 			return
 		), false
 
-		poses = '/static/results/'+document.jobID+'.traj.pdbqt'
+		poses = '/static/results/'+document.jobID+'.traj.pdbqt.gz'
 
 		loadDockingResults(document.receptor, poses)
 
