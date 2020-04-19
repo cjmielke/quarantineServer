@@ -36,8 +36,10 @@ def receptorLink(row):
 	ol = "<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (receptor, receptor)
 	return "<a target='BLANK' href='/receptors/%s'>%s</a>" % (receptor, receptor)
 
-def resultLink(jobID):
-	return "<a target='BLANK' href='/job/%s/'>Results</a>" % (jobID)
+def resultLink(row):
+	if row.uploaded:
+		return "<a target='BLANK' href='/job/%s/'>Results</a>" % (row.jobID)
+	else: return ''
 
 def userLink(row):
 	if row.username:
@@ -78,7 +80,7 @@ class RowFormatter:
 			for col in self.columns:
 				val=None
 				if col=='receptor': val = receptorLink(row)
-				if col=='results' and row.uploaded: val = resultLink(row.jobID)
+				if col=='results' : val = resultLink(row)
 				if col=='zinc': val = ZincDisp(row.zincID).link
 				if col=='user': val = userLink(row)
 
