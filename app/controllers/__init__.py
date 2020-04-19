@@ -84,8 +84,10 @@ class RowFormatter:
 				if col=='zinc': val = ZincDisp(row.zincID).link
 				if col=='user': val = userLink(row)
 
-				val = val or row[col]           # lazy switch case
-				val = val or ''                 # replace all None's with empty
+				if not val and col in row: val=row[col]
+
+				#val = val or row[col]           # lazy switch case
+				#val = val or ''                 # replace all None's with empty
 				cols.append(val)
 
 			self.results.append(cols)
