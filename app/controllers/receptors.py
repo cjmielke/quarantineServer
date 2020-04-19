@@ -75,6 +75,7 @@ def showReceptor(receptorName):
 		join zincLigands using(zincID)
 		join zincToSubset using (zincID)
 		join zincSubsets using (subset)
+		LEFT JOIN users USING(user)
 		WHERE receptor=:receptor
 		AND subsetName IN ('fda')
 		group by jobID
