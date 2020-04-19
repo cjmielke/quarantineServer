@@ -70,8 +70,8 @@ def showReceptor(receptorName):
 
 	######## FDA
 	fda = text('''
-		select jobs.*, group_concat(subsetName) as subsets
-		from jobs
+		select *, group_concat(subsetName) as subsets
+		FROM jobs
 		join zincLigands using(zincID)
 		join zincToSubset using (zincID)
 		join zincSubsets using (subset)

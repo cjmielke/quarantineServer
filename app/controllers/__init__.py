@@ -31,7 +31,8 @@ def zincPad(zincID):
 def zincLink():
 	"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zincName, zincName)
 
-def receptorLink(receptor):
+def receptorLink(row):
+	receptor = row.receptor
 	ol = "<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (receptor, receptor)
 	return "<a target='BLANK' href='/receptors/%s'>%s</a>" % (receptor, receptor)
 
@@ -73,16 +74,19 @@ class RowFormatter:
 
 			if row.receptor not in ALL_RECEPTORS: continue  # defense against injection
 
-			rows = []
+			cols = []
 			for col in self.columns:
-				val = row[col]
-				if col=='receptor': val = receptorLink(val)
+				val=None
+				if col=='receptor': val = receptorLink(row)
 				if col=='results' and row.uploaded: val = resultLink(row.jobID)
 				if col=='zinc': val = ZincDisp(row.zincID).link
 				if col=='user': val = userLink(row)
-				rows.append(val)
 
-			self.results.append(row)
+				val = val or row[col]           # lazy switch case
+				val = val or ''                 # replace all None's with empty
+				cols.append(val)
+
+			self.results.append(cols)
 
 
 
