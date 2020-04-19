@@ -79,7 +79,7 @@ class RowFormatter:
 				if col=='receptor': val = receptorLink(val)
 				if col=='results' and row.uploaded: val = resultLink(row.jobID)
 				if col=='zinc': val = ZincDisp(row.zincID).link
-				if col=='user': val = userLink(row.user)
+				if col=='user': val = userLink(row)
 				rows.append(val)
 
 			self.results.append(row)
