@@ -33,10 +33,26 @@ block content
 				a(href='https://github.com/cjmielke/quarantine-files/tree/master/receptors/{{receptorName}}', target='GITHUB') See this system on Github
 
 			br
+
+
+			.row
+				h4 FDA cleared ligands
+				br
+				br
+				table.table
+					thead
+						tr
+							- for col in FDA.columns
+								th(scope='col') {{col}}
+					tbody
+						- for r in FDA.results
+							tr
+								- for c in r
+									td {{c}}
+
 			br
 			br
 			.row
-
 
 				// FIXME - could later render the MarkDown document itself instead of hosting from github
 				//iframe(src='https://cjmielke.github.io/quarantine-files/receptors/{{receptorName}}', width='100%', height='500px')

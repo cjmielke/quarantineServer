@@ -25,6 +25,69 @@ def add_blueprint(blueprint):
 	_blueprints.append(blueprint)
 
 
+def zincPad(zincID):
+	return 'ZINC' + str(zincID).rjust(12, '0')
+
+def zincLink():
+	"<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (zincName, zincName)
+
+def receptorLink(receptor):
+	ol = "<a target='BLANK' href='https://github.com/cjmielke/quarantineAtHome/tree/master/receptors/%s'>%s</a>" % (receptor, receptor)
+	return "<a target='BLANK' href='/receptors/%s'>%s</a>" % (receptor, receptor)
+
+def resultLink(jobID):
+	return "<a target='BLANK' href='/job/%s/'>Results</a>" % (jobID)
+
+def userLink(row):
+	if row.username:
+		userName = safer(row.username)
+		return "<a href='/users/%s/'>%s</a>" % (row.user, userName)
+	else: return ''
+
+
+class ZincDisp():
+	def __init__(self, zincID):
+		self.zincID = zincID
+
+	@property
+	def pad(self): return 'ZINC' + str(self.zincID).rjust(12, '0')
+
+	@property
+	def name(self): return 'ZINC' + str(self.zincID)
+
+	@property
+	def link(self):
+		return "<a target='BLANK' href='http://zinc.docking.org/substances/%s/'>%s</a>" % (self.pad, self.name)
+
+
+
+class RowFormatter:
+	def __init__(self, resultProxy, columns=None):
+
+		if columns and type(columns)==str: columns=columns.split(' ')
+
+		self.columns = columns or resultProxy.keys()
+
+		self.results = []
+		for row in resultProxy:
+
+			if row.receptor not in ALL_RECEPTORS: continue  # defense against injection
+
+			rows = []
+			for col in self.columns:
+				val = row[col]
+				if col=='receptor': val = receptorLink(val)
+				if col=='results' and row.uploaded: val = resultLink(row.jobID)
+				if col=='zinc': val = ZincDisp(row.zincID).link
+				if col=='user': val = userLink(row.user)
+				rows.append(val)
+
+			self.results.append(row)
+
+
+
+
+
 # TODO - build in exclusion lists for specific columns
 def jobsTable(rows):
 

@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, request
 from ipaddress import ip_address
 from sqlalchemy import text
 
-from app.controllers import add_blueprint, jobsTable
+from app.controllers import add_blueprint, jobsTable, RowFormatter
 from app.initializers.settings import ALL_RECEPTORS, DOCKING_ALGOS, QUARANTINE_FILES
 from app.models import db
 from app.util import safer
@@ -63,10 +63,28 @@ def showReceptor(receptorName):
 	)
 
 	rows = db.engine.execute(query, receptor=receptorName)
-
 	results = jobsTable(rows)
 
-	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, results=results)
+
+
+
+	######## FDA
+	fda = text('''
+		select jobs.*, group_concat(subsetName) as subsets
+		from jobs
+		join zincLigands using(zincID)
+		join zincToSubset using (zincID)
+		join zincSubsets using (subset)
+		WHERE receptor=:receptor
+		AND subsetName IN ('fda')
+		group by jobID
+		order by bestDG 
+	;''')
+
+	res = db.engine.execute(fda, receptor=receptorName)
+	FDA = RowFormatter(res, columns='jobID user zinc receptor bestDG results')
+
+	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, results=results, FDA=FDA)
 
 
 
