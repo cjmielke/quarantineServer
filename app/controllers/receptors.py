@@ -48,6 +48,10 @@ def getJobCount(receptorName):
 	return count
 
 
+
+
+
+
 @bp.route('/<receptorName>/')
 def showReceptor(receptorName):
 
@@ -67,17 +71,22 @@ def showReceptor(receptorName):
 	count = getJobCount(receptorName)
 
 	query = text('''
-		select * from jobs
-		JOIN users USING(user)
+		select *, group_concat(subsetName) as subsets
+		FROM jobs
+		join zincLigands using(zincID)
+		join zincToSubset using (zincID)
+		join zincSubsets using (subset)
+		LEFT JOIN users USING(user)
 		WHERE receptor=:receptor
-		ORDER BY bestDG
+		group by jobID
+		order by bestDG 
 		LIMIT 300
 	;'''
 	)
 
 	res = db.engine.execute(query, receptor=receptorName)
 	#results = jobsTable(res)
-	ALL = RowFormatter(res, columns='jobID user zinc bestDG results')
+	ALL = RowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
 
 
 
@@ -98,7 +107,7 @@ def showReceptor(receptorName):
 	;''')
 
 	res = db.engine.execute(fda, receptor=receptorName)
-	FDA = RowFormatter(res, columns='jobID user zinc bestDG results')
+	FDA = RowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
 
 	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA, jobCount=count)
 
