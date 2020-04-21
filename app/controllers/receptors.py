@@ -37,6 +37,9 @@ def index():
 
 
 
+
+
+
 @bp.route('/<receptorName>/')
 def showReceptor(receptorName):
 
@@ -62,8 +65,9 @@ def showReceptor(receptorName):
 	;'''
 	)
 
-	rows = db.engine.execute(query, receptor=receptorName)
-	results = jobsTable(rows)
+	res = db.engine.execute(query, receptor=receptorName)
+	#results = jobsTable(res)
+	ALL = RowFormatter(res, columns='jobID user zinc bestDG results')
 
 
 
@@ -83,9 +87,9 @@ def showReceptor(receptorName):
 	;''')
 
 	res = db.engine.execute(fda, receptor=receptorName)
-	FDA = RowFormatter(res, columns='jobID user zinc receptor bestDG results')
+	FDA = RowFormatter(res, columns='jobID user zinc bestDG results')
 
-	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, results=results, FDA=FDA)
+	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA)
 
 
 

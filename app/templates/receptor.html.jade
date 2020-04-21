@@ -28,11 +28,54 @@ block content
 
 			- if mymd
 				.markdown.well
-					{{ mymd }}
+					center
+						{{ mymd }}
 
 				a(href='https://github.com/cjmielke/quarantine-files/tree/master/receptors/{{receptorName}}', target='GITHUB') See this system on Github
 
 			br
+
+		hr
+
+		.container-fluid
+			.row
+				.col-md-6.col-lg-6
+					center
+						h4 FDA cleared ligands
+					br
+					br
+					table.table
+						thead
+							tr
+								- for col in FDA.columns
+									th(scope='col') {{col}}
+						tbody
+							- for r in FDA.results
+								tr
+									- for c in r
+										td {{c}}
+
+				.col-md-6.col-lg-6
+					center
+						h4 All ligands
+					br
+					br
+
+
+
+					table.table
+						thead
+							tr
+								- for col in ALL.columns
+									th(scope='col') {{col}}
+						tbody
+							- for r in ALL.results
+								tr
+									- for c in r
+										td {{c}}
+
+
+		.container
 
 
 			.row
