@@ -47,6 +47,11 @@ def userLink(row):
 		return "<a href='/users/%s/'>%s</a>" % (row.user, userName)
 	else: return ''
 
+def smilesDrawing(row):
+	if row.smiles:
+		return '<img src="/static/ligandsvg/%s.svg">' % row.zincID
+	else: return ''
+
 
 class ZincDisp():
 	def __init__(self, zincID):
@@ -64,7 +69,7 @@ class ZincDisp():
 
 
 
-class RowFormatter:
+class JobsRowFormatter:
 	def __init__(self, resultProxy, columns=None):
 
 		if columns and type(columns)==str: columns=columns.split(' ')
@@ -83,6 +88,7 @@ class RowFormatter:
 				if col=='results' : val = resultLink(row)
 				if col=='zinc': val = ZincDisp(row.zincID).link
 				if col=='user': val = userLink(row)
+				if col=='drawing': val = smilesDrawing(row)
 
 				if not val and col in row: val=row[col]
 

@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, request
 from ipaddress import ip_address
 from sqlalchemy import text
 
-from app.controllers import add_blueprint, jobsTable, RowFormatter
+from app.controllers import add_blueprint, jobsTable, JobsRowFormatter
 from app.initializers.settings import ALL_RECEPTORS, DOCKING_ALGOS, QUARANTINE_FILES
 from app.models import db
 from app.util import safer
@@ -70,25 +70,6 @@ def showReceptor(receptorName):
 
 	count = getJobCount(receptorName)
 
-	query = text('''
-		select *, group_concat(subsetName) as subsets
-		FROM jobs
-		join zincLigands using(zincID)
-		join zincToSubset using (zincID)
-		join zincSubsets using (subset)
-		LEFT JOIN users USING(user)
-		WHERE receptor=:receptor
-		group by jobID
-		order by bestDG 
-		LIMIT 300
-	;'''
-	)
-
-	res = db.engine.execute(query, receptor=receptorName)
-	#results = jobsTable(res)
-	ALL = RowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
-
-
 
 
 	######## FDA
@@ -107,7 +88,29 @@ def showReceptor(receptorName):
 	;''')
 
 	res = db.engine.execute(fda, receptor=receptorName)
-	FDA = RowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
+	FDA = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets results')
+
+
+
+	query = text('''
+		select *, group_concat(subsetName) as subsets
+		FROM jobs
+		join zincLigands using(zincID)
+		join zincToSubset using (zincID)
+		join zincSubsets using (subset)
+		LEFT JOIN users USING(user)
+		WHERE receptor=:receptor
+		group by jobID
+		order by bestDG 
+		LIMIT 300
+	;'''
+	)
+
+	res = db.engine.execute(query, receptor=receptorName)
+	#results = jobsTable(res)
+	ALL = JobsRowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
+
+
 
 	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA, jobCount=count)
 
