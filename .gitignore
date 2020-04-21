@@ -9,3 +9,5 @@ ZINC-downloader-3D-pdbqt.gz.uri
 app/static/.webassets-cache/
 app/static/js/coffee.js
 #quarantineAtHome
+
+#app/static/ligandsvg/*.svg
