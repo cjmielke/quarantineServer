@@ -37,98 +37,45 @@ block content
 
 		hr
 
-		.container-fluid
-			.row
-				.col-md-6.col-lg-6
-					center
-						h4 FDA cleared ligands
-					br
-					br
-					table.table
-						thead
-							tr
-								- for col in FDA.columns
-									th(scope='col') {{col}}
-						tbody
-							- for r in FDA.results
-								tr
-									- for c in r
-										td {{c}}
-
-				.col-md-6.col-lg-6
-					center
-						h4 All ligands
-					br
-					br
-
-
-
-					table.table
-						thead
-							tr
-								- for col in ALL.columns
-									th(scope='col') {{col}}
-						tbody
-							- for r in ALL.results
-								tr
-									- for c in r
-										td {{c}}
-
-
 		.container
-
-
 			.row
-				h4 FDA cleared ligands
-				br
-				br
-				table.table
-					thead
-						tr
-							- for col in FDA.columns
-								th(scope='col') {{col}}
-					tbody
-						- for r in FDA.results
-							tr
-								- for c in r
-									td {{c}}
+				.col-md-12
 
-			br
-			br
-			.row
+					h4 Results
+					h5 Total jobs calculated : {{jobCount}}
 
-				// FIXME - could later render the MarkDown document itself instead of hosting from github
-				//iframe(src='https://cjmielke.github.io/quarantine-files/receptors/{{receptorName}}', width='100%', height='500px')
+					ul.nav.nav-tabs#myTab(role='tablist')
+						li.nav-item
+							a.nav-link.active#fda-tab(href="#fdacontent", data-toggle='tab', role="tab", aria-controls="fdacontent", aria-selected="true") FDA Cleared Ligands
+						li.nav-item
+							a.nav-link#all-tab(href="#all-content", data-toggle='tab', role="tab", aria-controls="all-content", aria-selected="false") All Ligands
+					.tab-content#myTabContent
+						.tab-pane.fade.show.active#fdacontent(role='tabpanel', aria-labelledby="fda-tab")
+							table.table
+								thead
+									tr
+										- for col in FDA.columns
+											th(scope='col') {{col}}
+								tbody
+									- for r in FDA.results
+										tr
+											- for c in r
+												td {{c}}
+
+						.tab-pane.fade#all-content(role='tabpanel', aria-labelledby="all-tab")
+							table.table
+								thead
+									tr
+										- for col in ALL.columns
+											th(scope='col') {{col}}
+								tbody
+									- for r in ALL.results
+										tr
+											- for c in r
+												td {{c}}
 
 
-				h4 Best ligands
-				br
-				br
 
-
-
-				table.table
-					thead
-						tr
-							th(scope='col') JobID
-							th(scope='col') Username
-							th(scope='col') Ligand
-							th(scope='col') Receptor
-							th(scope='col') Binding Energy
-					tbody
-						- for r in results
-							tr
-								- for c in r
-									td {{c}}
-
-			.row
-				.col-sm-6.col-md-6.col.lg-6
-
-				//
-					.col-sm-6.col-md-6.col.lg-6
-						.title-block.clearfix
-							h2 Quarantine@Home
-							img(src='',style='height:170px;float:right')
 
 
 

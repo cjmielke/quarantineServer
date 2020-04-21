@@ -36,8 +36,16 @@ def index():
 	return render_template('receptors.html.jade', mymd=converted)
 
 
-
-
+def getJobCount(receptorName):
+	query = text('''
+		select count(*) from jobs
+		WHERE receptor=:receptor
+	;'''
+	)
+	res = db.engine.execute(query, receptor=receptorName)
+	row = res.fetchone()
+	count = row[0]
+	return count
 
 
 @bp.route('/<receptorName>/')
@@ -55,6 +63,8 @@ def showReceptor(receptorName):
 	md=None         # don't let flask-markdown handle this
 
 	# get top jobs for this receptor
+
+	count = getJobCount(receptorName)
 
 	query = text('''
 		select * from jobs
@@ -84,12 +94,13 @@ def showReceptor(receptorName):
 		AND subsetName IN ('fda')
 		group by jobID
 		order by bestDG 
+		LIMIT 300
 	;''')
 
 	res = db.engine.execute(fda, receptor=receptorName)
 	FDA = RowFormatter(res, columns='jobID user zinc bestDG results')
 
-	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA)
+	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA, jobCount=count)
 
 
 
