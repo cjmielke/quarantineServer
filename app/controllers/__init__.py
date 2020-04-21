@@ -49,8 +49,8 @@ def userLink(row):
 
 def smilesDrawing(row):
 	if row.smiles:
-		#return '<img src="/static/ligandsvg/%s.svg">' % row.zincID
-		return '<object data="/static/ligandsvg/%s.svg" type="image/svg+xml"></object>' % row.zincID
+		return '<img src="/static/ligandsvg/%s.svg">' % row.zincID
+		#return '<object data="/static/ligandsvg/%s.svg" type="image/svg+xml" height="100\%" width="100\%"></object>' % row.zincID
 	else: return ''
 
 

@@ -48,6 +48,9 @@ def smitosvg(smi, molSize=(400, 200), outFile=None):
 	svg = drawer.GetDrawingText()
 	svg = svg.replace('svg:', '')
 
+	# bug fix for rendering in chrome
+	svg = svg.replace('xmlns:svg=', 'xmlns=')
+
 	if outFile:
 		with open(outFile, 'w') as fh:
 			fh.write(svg)
@@ -55,7 +58,7 @@ def smitosvg(smi, molSize=(400, 200), outFile=None):
 	return svg
 
 smiles = 'Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(C[C@H](O)[C@H](O)[C@H](O)CO)c2cc1C'
-svg = smitosvg(smiles, (150,100))
+svg = smitosvg(smiles, (150,100), outFile='test.svg')
 
 
 
