@@ -108,7 +108,7 @@ def showReceptor(receptorName):
 
 	res = db.engine.execute(query, receptor=receptorName)
 	#results = jobsTable(res)
-	ALL = JobsRowFormatter(res, columns='jobID user zinc bestDG weight ph charge subsets results')
+	ALL = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets results')
 
 
 
