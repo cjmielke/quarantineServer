@@ -192,8 +192,6 @@ def getTrancheJob(trancheID):
 	tranche.lastAssigned += 1
 
 	db.session.commit()
-	#receptors = ['spike-1', 'mpro-1']				# hardcoded for now - future versions of API will assess what's needed from database
-	#receptors = ['mpro-1']
 	receptors = LIVE_RECEPTORS
 
 	return jsonify(**dict(ligand=tranche.lastAssigned, receptors=receptors))

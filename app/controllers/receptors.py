@@ -76,7 +76,7 @@ def showReceptor(receptorName):
 	fda = text('''
 		select *, group_concat(subsetName) as subsets
 		FROM jobs
-		join zincLigands using(zincID)
+		LEFT JOIN zincLigands using(zincID)
 		join zincToSubset using (zincID)
 		join zincSubsets using (subset)
 		LEFT JOIN users USING(user)
@@ -95,9 +95,9 @@ def showReceptor(receptorName):
 	query = text('''
 		select *, group_concat(subsetName) as subsets
 		FROM jobs
-		join zincLigands using(zincID)
-		join zincToSubset using (zincID)
-		join zincSubsets using (subset)
+		LEFT JOIN zincLigands using(zincID)
+		LEFT JOIN zincToSubset using (zincID)
+		LEFT JOIN zincSubsets using (subset)
 		LEFT JOIN users USING(user)
 		WHERE receptor=:receptor
 		group by jobID
