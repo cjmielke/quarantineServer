@@ -100,6 +100,17 @@ def drawNeededLigands():
 		drawRows(rows)
 
 
+		query = text('''
+		select * FROM jobs
+		join zincLigands using(zincID)
+		group by zincID
+		order by bestDG 
+		LIMIT 1000
+		;''')
+		rows = db.engine.execute(query)
+		drawRows(rows)
+
+
 if __name__=='__main__':
 	drawNeededLigands()
 
