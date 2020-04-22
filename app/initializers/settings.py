@@ -38,7 +38,7 @@ MYSQL_USER = 'quarantine'
 #MYSQL_DEVELOPMENT_DB = 'app'
 MYSQL_DB = 'quarantine'
 
-ALL_RECEPTORS = ['mpro-1', 'spike-1']
+ALL_RECEPTORS = ['mpro-1', 'spike-1', 'spike-2']
 
 LIVE_RECEPTORS = ALL_RECEPTORS				# receptors currently being assigned
 

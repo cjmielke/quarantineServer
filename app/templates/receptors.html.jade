@@ -26,43 +26,6 @@ block content
 				- if mymd
 					{{ mymd }}
 
-			br
-			.row
-
-
-				// FIXME - could later render the MarkDown document itself instead of hosting from github
-				//iframe(src='https://cjmielke.github.io/quarantine-files/receptors/{{receptorName}}', width='100%', height='500px')
-
-
-				h4 Best ligands
-
-
-
-			.row
-				table.table
-					thead
-						tr
-							th(scope='col') JobID
-							th(scope='col') Username
-							th(scope='col') Ligand
-							th(scope='col') Receptor
-							th(scope='col') Binding Energy
-					tbody
-						- for r in results
-							tr
-								- for c in r
-									td {{c}}
-
-			.row
-				.col-sm-6.col-md-6.col.lg-6
-
-				//
-					.col-sm-6.col-md-6.col.lg-6
-						.title-block.clearfix
-							h2 Quarantine@Home
-							img(src='',style='height:170px;float:right')
-
-
 
 
 
