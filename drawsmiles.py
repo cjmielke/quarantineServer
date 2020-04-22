@@ -18,6 +18,7 @@ from HTMLParser import HTMLParser
 
 from sqlalchemy import text
 
+from app.initializers.settings import ALL_RECEPTORS
 from app.models import db
 
 
@@ -100,15 +101,18 @@ def drawNeededLigands():
 		drawRows(rows)
 
 
-		query = text('''
-		select * FROM jobs
-		join zincLigands using(zincID)
-		group by zincID
-		order by bestDG 
-		LIMIT 1000
-		;''')
-		rows = db.engine.execute(query)
-		drawRows(rows)
+		for receptor in ALL_RECEPTORS:
+
+			query = text('''
+			select * FROM jobs
+			join zincLigands using(zincID)
+			WHERE receptor=:receptor
+			group by zincID
+			order by bestDG 
+			LIMIT 1000
+			;''')
+			rows = db.engine.execute(query, receptor=receptor)
+			drawRows(rows)
 
 
 if __name__=='__main__':

@@ -92,6 +92,7 @@ class JobsRowFormatter:
 				if col=='drawing': val = smilesDrawing(row)
 
 				if not val and col in row: val=row[col]
+				if val is None or val=='None': val=''
 
 				#val = val or row[col]           # lazy switch case
 				#val = val or ''                 # replace all None's with empty
