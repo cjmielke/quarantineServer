@@ -8,6 +8,7 @@ from pyjade.ext.jinja import PyJadeExtension
 
 from app.initializers import settings
 from app.initializers.assets import init_assets
+from app.initializers.settings import ALL_RECEPTORS
 from app.models import db
 #from flaskext.markdown import Markdown             # not working anymore!!!! refuses to import on server!
 
@@ -74,4 +75,13 @@ def create_app(debug):
 	#Markdown(app)              # doesn't work anymore!!!
 
 	return app
+
+
+
+# Make some variables globally available to all templates
+@app.context_processor
+def inject_vars():
+	return dict(
+		ALL_RECEPTORS=ALL_RECEPTORS
+	)
 

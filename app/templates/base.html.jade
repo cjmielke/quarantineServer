@@ -31,19 +31,20 @@ block header
 									| Join
 								a.nav-link(href='/users')
 									| Users
-								a.nav-link(href='/receptors')
-									| Receptors
+								//a.nav-link(href='/receptors')
+								//	| Targets
 								li.nav-item
 								//a.nav-link(href='https://github.com/cjmielke/quarantineAtHome/blob/master/README.md' target='_BLANK') Join
-								//li.nav-item.dropdown
-								//a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-								//	| Stats
-								//.dropdown-menu(aria-labelledby='navbarDropdown')
-								//	a.dropdown-item(href='/users/') Top Users
-								//	a.dropdown-item(href='#') Best Hits
-								//	//.dropdown-divider
-								//	//a.dropdown-item(href='#') Something else here
-								//li.nav-item
+								li.nav-item.dropdown
+									a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+										| Targets
+									.dropdown-menu(aria-labelledby='navbarDropdown')
+										a.dropdown-item(href='/receptors/') Descriptions
+										.dropdown-divider
+										- for receptor in ALL_RECEPTORS
+											a.dropdown-item(href='/receptors/{{receptor}}') {{receptor}}
+										//a.dropdown-item(href='#') Something else here
+								li.nav-item
 								//a.nav-link.disabled(href='#') Disabled
 							//
 								form.form-inline.my-2.my-lg-0
