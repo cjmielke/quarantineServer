@@ -164,7 +164,7 @@ def assignTranche():
 def assignTrancheSpecial():
 
 	# disabled moonshots for now
-	if random.random() < 0.0:                       # moonshot - pull from the "everything" subset
+	if random.random() < 1.0:                       # moonshot - pull from the "everything" subset
 		rows = random3DTranche()
 	else:                                           # pick instead from annotated subsets, fda cleared, etc
 		subset = random.choice(['fda', 'world', 'in-vivo'])
