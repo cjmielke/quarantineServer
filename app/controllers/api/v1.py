@@ -42,56 +42,10 @@ Use the Tranche Browser to facilitate downloading these files. The Tranche Brows
 
 '''
 
-'''
-# tranches defined in this case by individual compressed pdbqt.gz files
-tranches = [
-	'BAAAML.xaa.pdbqt.gz',
-	'BBAAML.xaa.pdbqt.gz',
-	'BCAAML.xaa.pdbqt.gz'
-]
-
-class Tranche():
-	def __init__(self, trancheName):
-		self.name = trancheName
-		self.lastModel = 0
-		return
-
-	def nextModel(self):
-		self.lastModel+=1
-		return self.lastModel
-
-
-class TrancheModels():
-
-	def __init__(self):
-		self.tranches = {}
-		return
-
-	def nextModel(self, trancheName):
-		if trancheName not in self.tranches:
-			# look in database to find the most recently completed modelID
-			# not in database? Then set modelNum = 0
-			self.tranches[trancheName] = Tranche(trancheName)
-			pass
-		tr = self.tranches[trancheName]
-		return tr.nextModel()
-
-
-assigner = TrancheModels()			# single object shared among all threads
-'''
-
-
 
 def random3DTranche():
 	weights = "'A','B','C','D','E','F','G','H','I','J','K'"
 	logPs = "'A','B','C','D','E','F','G','H','I','J','K'"
-
-	'''
-	The third letter is reactivity : A=anodyne. B=Bother (e.g. chromophores) C=clean (but pains ok), E=mild reactivity ok, G=reactive ok, I = hot chemistry ok
-	The fourth letter is purchasability: A and B = in stock, C = in stock via agent, D = make on demand, E = boutique (expensive), F=annotated (not for sale)
-	The fifth letter is pH range: R = ref (7.4), M = mid (near 7.4), L = low (around 6.4), H=high (around 8.4).
-	The sixth and last dimension is net molecular charge. Here we follow the convention of InChIkeys. Thus. N = neutral, M = minus 1, L = minus 2 (or greater). O = plus 1, P = plus 2 (or greater).
-	'''
 
 	reactivity = 'ABCEGI'
 	purch = 'ABCDEF'
@@ -105,14 +59,27 @@ def random3DTranche():
 		AND charge in ('N','M','O');
 	''')
 
+	# these are ordered by liklihood that they will have an FDA ligand
+	query = text('''
+		SELECT * from tranches
+		WHERE weight in ('C','A','B','K','D','G','H')
+		AND logP in ('D','K','E','F','C','G', 'I', 'H', 'B', 'A', 'J')
+		AND purchasibility in ('A','B','E')
+		AND pH in ('R','M')
+		AND charge in ('N','O','M');
+	''')
+
+
 	# NOTE - no limitation whatsoever on logP - only really limiting purchasibility, pH, and extreme charge states
 	query = text('''
 		SELECT * from tranches
 		WHERE weight in ('A','B','C','D','E','F','G','H','I','J','K')
+		AND reactivity in ('A', 'E')
 		AND purchasibility in ('A','B')
 		AND pH in ('R','M')
 		AND charge in ('N','M','O')
-		AND loopCount<5
+		ORDER BY loopCount asc
+		LIMIT 100
 		;
 	''')
 
