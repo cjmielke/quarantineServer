@@ -25,6 +25,7 @@ parser.add_argument('-scan', action='store_true')
 parser.add_argument('-load', action='store_true')
 parser.add_argument('-special', action='store_true')
 parser.add_argument('-fetch', action='store_true')
+parser.add_argument('-build', type=str)
 args = parser.parse_args()
 
 debug = True
@@ -230,7 +231,7 @@ def fetchImportantTranches():
 			for row in rows:
 				if row.numDrugs < 2:
 					print 'Down in the weeds .... exiting here'
-					sys.exit(0)
+					break
 
 				TrancheReader(0, row.urlPath, localCache=os.path.join(os.getcwd(), 'specialDownload'))
 
@@ -240,6 +241,17 @@ def fetchImportantTranches():
 		handleQuery(query)
 		query = text('select * from InManTranches join tranches USING(trancheName) order by numDrugs desc;')
 		handleQuery(query)
+
+def assembleSpecialTranche(subset='fda'):
+	from app.core import create_app
+	app = create_app(debug=debug)
+	with app.app_context():
+		query = text('select zincID from zincToSubset join zincSubsets using(subset)where subsetName=:subset;')
+		rows = db.engine.execute(query, subset=subset)
+		zincIDs = set([r.zincID for r in rows])
+		print 'Number of zincIDs to find : ', len(zincIDs)
+
+
 
 
 
@@ -254,6 +266,8 @@ if __name__ == "__main__":
 		findLocalTranches()
 
 	if args.fetch: fetchImportantTranches()
+
+	if args.build: assembleSpecialTranche(subset=args.build)
 
 	if not args.load or args.scan:
 		print 'need a command'
