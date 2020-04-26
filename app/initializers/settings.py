@@ -40,7 +40,9 @@ MYSQL_DB = 'quarantine'
 
 ALL_RECEPTORS = ['mpro-1', 'spike-1', 'spike-2']
 
-LIVE_RECEPTORS = ['mpro-1', 'spike-2']				# receptors currently being assigned
+
+#LIVE_RECEPTORS = ['mpro-1', 'spike-2']				# receptors currently being assigned
+LIVE_RECEPTORS = ALL_RECEPTORS
 
 
 
