@@ -220,7 +220,7 @@ from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset) 
 
 WEEDS = 2
 DOWNLOAD_PATH = os.path.join(os.getcwd(), 'specialDownload')
-
+DOWNLOAD_PATH = '/data/ZINC/files.docking.org/'
 
 def fetchImportantTranches():
 	'''
@@ -273,7 +273,7 @@ def assembleSpecialTranche(subset='fda'):
 
 		for row in rows:
 			tranches.append(row.urlPath)
-			if row.numDrugs<WEEDS: break
+			#if row.numDrugs<WEEDS: break
 
 			TR = TrancheReader(0, row.urlPath, localCache=DOWNLOAD_PATH)
 			modelNum = 1
@@ -287,8 +287,8 @@ def assembleSpecialTranche(subset='fda'):
 					hitNum += 1
 					outTranche.write('MODEL        %s\n' % str(hitNum))
 					outTranche.write(model)
-					#outTranche.write('ENDMDL\n')       # not needed, its in model
-					outTranche.write('\n')
+					outTranche.write('\nENDMDL\n')
+					#outTranche.write('\n')
 
 		outTranche.close()
 
