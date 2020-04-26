@@ -77,8 +77,11 @@ class JobsRowFormatter:
 
 		self.columns = columns or resultProxy.keys()
 
+		zincIDs = set()
 		self.results = []
 		for row in resultProxy:
+			if row.zincID in zincIDs: continue
+			zincIDs.add(row.zincID)
 
 			if row.receptor not in ALL_RECEPTORS: continue  # defense against injection
 
