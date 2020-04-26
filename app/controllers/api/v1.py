@@ -162,7 +162,9 @@ def assignTrancheSpecial():
 
 	selection = random.choice(rows)
 
-	response = dict(tranche=selection.urlPath, id=selection.trancheID)
+	resp = dict(tranche=selection.urlPath, id=selection.trancheID)
+	if 'custom' in selection.urlPath: resp['mirror'] = 'https://quarantine.infino.me/ligands/'
+	response = resp
 
 	return jsonify(**response)
 
