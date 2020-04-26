@@ -120,6 +120,13 @@ def randomSubsetTranche(subset):
 	return rows
 
 
+def customTranche():
+	query = text('SELECT * from tranches WHERE subset="custom";')
+	rows = db.engine.execute(query)
+	rows = [r for r in rows]
+	return rows
+
+
 @bp.route('/tranche/get')
 def assignTranche():
 	'''
@@ -151,14 +158,18 @@ def assignTranche():
 def assignTrancheSpecial():
 
 	# disabled moonshots for now
-	if random.random() < 1.0:                       # moonshot - pull from the "everything" subset
+	if random.random() < 0.0:                       # moonshot - pull from the "everything" subset
 		rows = specialWeighted3DTranches()
 		if len(rows)==0:
 			rows = random3DTranche()
 	else:                                           # pick instead from annotated subsets, fda cleared, etc
-		subset = random.choice(['fda', 'world', 'in-vivo'])     # something seriously wrong with special subsets on zincDB
+		# FIXME - these don't work sadly .... the special subsets on files.docking.org seem corrupt :/
+		#subset = random.choice(['fda', 'world', 'in-vivo'])     # something seriously wrong with special subsets on zincDB
 		#subset = random.choice(['fda'])
-		rows = randomSubsetTranche(subset)
+		#rows = randomSubsetTranche(subset)
+
+		rows = customTranche()
+
 
 	selection = random.choice(rows)
 
