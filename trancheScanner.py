@@ -1,5 +1,6 @@
 #!/usr/bin/python2.7
 import argparse
+import gzip
 import os
 import sys
 
@@ -217,6 +218,9 @@ from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset) 
 
 '''
 
+WEEDS = 2
+DOWNLOAD_PATH = os.path.join(os.getcwd(), 'specialDownload')
+
 
 def fetchImportantTranches():
 	'''
@@ -229,11 +233,11 @@ def fetchImportantTranches():
 		def handleQuery(query):
 			rows = db.engine.execute(query)
 			for row in rows:
-				if row.numDrugs < 2:
+				if row.numDrugs < WEEDS:
 					print 'Down in the weeds .... exiting here'
 					break
 
-				TrancheReader(0, row.urlPath, localCache=os.path.join(os.getcwd(), 'specialDownload'))
+				TrancheReader(0, row.urlPath, localCache=DOWNLOAD_PATH)
 
 		query = text('select * from FDATranches join tranches USING(trancheName) order by numDrugs desc;')
 		handleQuery(query)
@@ -251,8 +255,43 @@ def assembleSpecialTranche(subset='fda'):
 		zincIDs = set([r.zincID for r in rows])
 		print 'Number of zincIDs to find : ', len(zincIDs)
 
+		# now parse the tranches sequentially
+		query = text('''
+			select trancheName, urlPath, count(*) as numDrugs
+			from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset)
+			JOIN tranches using(trancheName)
+			where subsetName=:subset
+			group by trancheName
+			order by numDrugs desc
+		;''')
+		rows = db.engine.execute(query, subset=subset)
+		tranches = []
 
+		outTranche = gzip.open('%s_special.pdbqt.gz' % subset, 'w')
 
+		hitNum = 0
+
+		for row in rows:
+			tranches.append(row.urlPath)
+			if row.numDrugs<WEEDS: break
+
+			TR = TrancheReader(0, row.urlPath, localCache=DOWNLOAD_PATH)
+			modelNum = 1
+			while True:
+				try: zincID, model = TR.getModel(modelNum)
+				except StopIteration: break
+				zincID = int(zincID.replace('ZINC',''))
+				modelNum+=1
+				if zincID in zincIDs:
+					print 'Found ', zincID
+					hitNum += 1
+					outTranche.write('MODEL        %s\n' % str(hitNum))
+					outTranche.write(model)
+					#outTranche.write('ENDMDL\n')       # not needed, its in model
+
+		outTranche.close()
+
+		print 'Found %s out of %s ligands' % (hitNum, len(zincIDs))
 
 
 if __name__ == "__main__":
