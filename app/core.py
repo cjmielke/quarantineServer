@@ -1,5 +1,6 @@
 #import urllib3.contrib.pyopenssl
 #urllib3.contrib.pyopenssl.inject_into_urllib3()
+import os
 from urlparse import urljoin
 
 from flask import Flask
@@ -40,11 +41,12 @@ def create_app(debug):
 	#	app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
 
 	# Generate DB URI
-	if debug:
+	if debug and not os.getenv('MYSQL_HOST'):
 		db_uri = settings.SQLALCHEMY_SQLITE_URI
 	else:				# for production
 		from app.initializers import secrets
-		db_uri = 'mysql://%s:%s@localhost/%s' % (settings.MYSQL_USER, secrets.MYSQL_PASSWORD, settings.MYSQL_DB)
+		MYSQL_HOST = os.getenv('MYSQL_HOST') or 'localhost'
+		db_uri = 'mysql://%s:%s@%s/%s' % (settings.MYSQL_USER, secrets.MYSQL_PASSWORD, MYSQL_HOST, settings.MYSQL_DB)
 
 	app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 	#app.secret_key = SECRET_KEY  # move this out of here eventually

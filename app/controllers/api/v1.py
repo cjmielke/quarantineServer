@@ -84,8 +84,27 @@ def random3DTranche():
 	''')
 
 	rows = db.engine.execute(query)
+	rows = [r for r in rows]
 
 	return rows
+
+
+
+def specialWeighted3DTranches():
+
+	# NOTE - no limitation whatsoever on logP - only really limiting purchasibility, pH, and extreme charge states
+	query = text('''
+		select * from tranches
+		join FDATranches using(trancheName)
+		order by loopCount asc, numDrugs desc
+		LIMIT 1
+	;''')
+
+	rows = db.engine.execute(query)
+	rows = [r for r in rows]
+
+	return rows
+
 
 
 def randomSubsetTranche(subset):
@@ -96,6 +115,7 @@ def randomSubsetTranche(subset):
 	''')
 
 	rows = db.engine.execute(query, subset=subset)
+	rows = [r for r in rows]
 
 	return rows
 
@@ -132,13 +152,14 @@ def assignTrancheSpecial():
 
 	# disabled moonshots for now
 	if random.random() < 1.0:                       # moonshot - pull from the "everything" subset
-		rows = random3DTranche()
+		rows = specialWeighted3DTranches()
+		if len(rows)==0:
+			rows = random3DTranche()
 	else:                                           # pick instead from annotated subsets, fda cleared, etc
-		subset = random.choice(['fda', 'world', 'in-vivo'])
+		subset = random.choice(['fda', 'world', 'in-vivo'])     # something seriously wrong with special subsets on zincDB
 		#subset = random.choice(['fda'])
 		rows = randomSubsetTranche(subset)
 
-	rows = [r for r in rows]
 	selection = random.choice(rows)
 
 	response = dict(tranche=selection.urlPath, id=selection.trancheID)

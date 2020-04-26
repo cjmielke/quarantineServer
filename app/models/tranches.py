@@ -34,6 +34,7 @@ class Tranche(db.Model):
 
 	local = db.Column('local', db.Integer, index=True)
 
+	trancheName = db.Column('trancheName', db.String(6), index=True)
 
 def getTranche(id):
 	# type: (int) -> Tranche
