@@ -288,6 +288,7 @@ def assembleSpecialTranche(subset='fda'):
 					outTranche.write('MODEL        %s\n' % str(hitNum))
 					outTranche.write(model)
 					#outTranche.write('ENDMDL\n')       # not needed, its in model
+					outTranche.write('\n')
 
 		outTranche.close()
 
