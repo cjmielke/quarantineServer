@@ -1,12 +1,14 @@
 #!/usr/bin/python2.7
 import argparse
 import os
+import sys
 
 from sqlalchemy import text
 
 from app.initializers.settings import LOCAL_ZINC
 from app.models import db
 from app.models.tranches import Tranche, getTranche
+from quarantineAtHome.getjob import TrancheReader
 
 '''
 
@@ -22,6 +24,7 @@ parser.add_argument('-production', action='store_true')
 parser.add_argument('-scan', action='store_true')
 parser.add_argument('-load', action='store_true')
 parser.add_argument('-special', action='store_true')
+parser.add_argument('-fetch', action='store_true')
 args = parser.parse_args()
 
 debug = True
@@ -197,6 +200,48 @@ def findLocalTranches():
 
 		db.session.commit()
 
+'''
+The special tranche tables were created manually like this :
+
+create table  BiogenicTranches as
+select trancheName, count(*) as numDrugs,
+substring(trancheName, 1, 1) as weight,
+substring(trancheName, 2, 1) as logP,
+substring(trancheName, 3, 1) as reactivity,
+substring(trancheName, 4, 1) as purchasibility,
+substring(trancheName, 5, 1) as pH,
+substring(trancheName, 6, 1) as charge
+from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset) where subsetName='biogenic' group by trancheName
+;
+
+'''
+
+
+def fetchImportantTranches():
+	'''
+	Download tranches that have lots of FDA/World/Whatever molecules in them
+	'''
+	from app.core import create_app
+	app = create_app(debug=debug)
+	with app.app_context():
+
+		def handleQuery(query):
+			rows = db.engine.execute(query)
+			for row in rows:
+				if row.numDrugs < 2:
+					print 'Down in the weeds .... exiting here'
+					sys.exit(0)
+
+				TrancheReader(0, row.urlPath, localCache=os.path.join(os.getcwd(), 'specialDownload'))
+
+		query = text('select * from FDATranches join tranches USING(trancheName) order by numDrugs desc;')
+		handleQuery(query)
+		query = text('select * from WorldTranches join tranches USING(trancheName) order by numDrugs desc;')
+		handleQuery(query)
+		query = text('select * from InManTranches join tranches USING(trancheName) order by numDrugs desc;')
+		handleQuery(query)
+
+
 
 if __name__ == "__main__":
 	if args.load:
@@ -207,6 +252,8 @@ if __name__ == "__main__":
 
 	if args.scan:
 		findLocalTranches()
+
+	if args.fetch: fetchImportantTranches()
 
 	if not args.load or args.scan:
 		print 'need a command'
