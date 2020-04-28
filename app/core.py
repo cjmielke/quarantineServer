@@ -16,8 +16,8 @@ from app.models import db
 # from app.auth import loginManagerSetup
 
 app = Flask('quarantine', static_folder=settings.STATIC_FOLDER, template_folder=settings.TEMPLATE_FOLDER)
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 1800
-
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
 
 # Caching
