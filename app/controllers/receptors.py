@@ -79,6 +79,7 @@ def showReceptor(receptorName):
 		LEFT JOIN zincLigands using(zincID)
 		join zincToSubset using (zincID)
 		join zincSubsets using (subset)
+		LEFT JOIN chembl2zinc USING(zincID) LEFT JOIN chembl_26.molecule_dictionary using(chembl_id) 
 		LEFT JOIN users USING(user)
 		WHERE receptor=:receptor
 		AND subsetName IN ('fda')
@@ -88,7 +89,7 @@ def showReceptor(receptorName):
 	;''')
 
 	res = db.engine.execute(fda, receptor=receptorName)
-	FDA = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets results')
+	FDA = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets chembl results')
 
 
 

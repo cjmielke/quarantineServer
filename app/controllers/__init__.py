@@ -53,6 +53,20 @@ def smilesDrawing(row):
 		#return '<object data="/static/ligandsvg/%s.svg" type="image/svg+xml" height="100\%" width="100\%"></object>' % row.zincID
 	else: return ''
 
+def chemblDisp(row):
+	href=None
+	name = ''
+	res = ''
+	if row.chembl_id:
+		href = 'https://www.ebi.ac.uk/chembl/compound_report_card/%s/' % row.chembl_id
+		name = row.chembl_id
+	if row.pref_name:
+		name = row.pref_name
+
+	if href:
+		res = "<a href='%s' TARGET='CHEMBL'>%s</a>" % (href, name)
+
+	return res
 
 class ZincDisp():
 	def __init__(self, zincID):
@@ -93,6 +107,7 @@ class JobsRowFormatter:
 				if col=='zinc': val = ZincDisp(row.zincID).link
 				if col=='user': val = userLink(row)
 				if col=='drawing': val = smilesDrawing(row)
+				if col=='chembl': val = chemblDisp(row)
 
 				if not val and col in row: val=row[col]
 				if val is None or val=='None': val=''
