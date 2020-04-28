@@ -158,7 +158,7 @@ def assignTranche():
 def assignTrancheSpecial():
 
 	# disabled moonshots for now
-	if random.random() < 0.0:                       # moonshot - pull from the "everything" subset
+	if random.random() < 0.8:                       # moonshot - pull from the "everything" subset
 		rows = specialWeighted3DTranches()
 		if len(rows)==0:
 			rows = random3DTranche()
@@ -203,6 +203,7 @@ def TrancheEOF(trancheID):
 	print tranche.lastAssigned
 	#tranche.lastAssigned -= 1
 	tranche.lastAssigned = 0        # really should just reset from now on, especially with smaller subsets!
+	if tranche.loopCount is None: tranche.loopCount=0   # this killed me ...
 	tranche.loopCount += 1
 	db.session.commit()
 	return jsonify(**dict(status='ok'))
