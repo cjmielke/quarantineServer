@@ -91,6 +91,7 @@ def random3DTranche():
 
 
 def specialWeighted3DTranches():
+	'''Pulls tranches from the global 3D set, but preferrentially grabs tranches with the most FDA-cleared drugs'''
 
 	# NOTE - no limitation whatsoever on logP - only really limiting purchasibility, pH, and extreme charge states
 	query = text('''
@@ -121,7 +122,7 @@ def randomSubsetTranche(subset):
 
 
 def customTranche():
-	query = text('SELECT * from tranches WHERE subset="custom";')
+	query = text('SELECT * from tranches WHERE subset="custom" ORDER BY loopCount asc LIMIT 1;')
 	rows = db.engine.execute(query)
 	rows = [r for r in rows]
 	return rows
@@ -158,7 +159,7 @@ def assignTranche():
 def assignTrancheSpecial():
 
 	# disabled moonshots for now
-	if random.random() < 0.8:                       # moonshot - pull from the "everything" subset
+	if random.random() < 0.2:                       # moonshot - pull from the "everything" subset
 		rows = specialWeighted3DTranches()
 		if len(rows)==0:
 			rows = random3DTranche()
@@ -169,6 +170,8 @@ def assignTrancheSpecial():
 		#rows = randomSubsetTranche(subset)
 
 		rows = customTranche()
+		if len(rows)==0:
+			rows = random3DTranche()
 
 
 	selection = random.choice(rows)
