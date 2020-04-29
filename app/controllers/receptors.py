@@ -58,7 +58,7 @@ add_blueprint(bp)
 
 
 @bp.route('/<receptorName>/')
-@cache.cached(timeout=60)
+@cache.cached(timeout=60*3)
 def showReceptor(receptorName):
 
 	if receptorName not in ALL_RECEPTORS: return 'No receptor with this definition', 404
@@ -105,6 +105,7 @@ def showReceptor(receptorName):
 		LEFT JOIN zincLigands using(zincID)
 		LEFT JOIN zincToSubset using (zincID)
 		LEFT JOIN zincSubsets using (subset)
+		LEFT JOIN chembl2zinc USING(zincID) LEFT JOIN chembl_26.molecule_dictionary using(chembl_id) 
 		LEFT JOIN users USING(user)
 		WHERE receptor=:receptor
 		group by jobID
@@ -115,7 +116,7 @@ def showReceptor(receptorName):
 
 	res = db.engine.execute(query, receptor=receptorName)
 	#results = jobsTable(res)
-	ALL = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets results')
+	ALL = JobsRowFormatter(res, columns='jobID user zinc drawing bestDG weight ph charge subsets chembl results')
 
 
 

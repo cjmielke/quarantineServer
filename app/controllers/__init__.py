@@ -66,6 +66,9 @@ def chemblDisp(row):
 	if href:
 		res = "<a href='%s' TARGET='CHEMBL'>%s</a>" % (href, name)
 
+	if row.usan_stem_definition:
+		res += '<br />%s' % row.usan_stem_definition
+
 	return res
 
 class ZincDisp():
