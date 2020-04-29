@@ -37,6 +37,15 @@ block content
 								tr
 									td {{key}}
 									td {{value}}
+					br
+					h4 downloads
+					ul
+						li
+							a(href='https://quarantine.infino.me/static/results/{{job.id}}.traj.pdbqt.gz') docked poses
+						li
+							a(href='https://quarantine.infino.me/static/results/{{job.id}}.dlg.gz') docking logfile
+						li
+							a(href='https://github.com/cjmielke/quarantine-files/tree/master/receptors/{{row.receptor}}') receptor pdbqt file
 
 	br
 	br
