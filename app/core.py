@@ -4,7 +4,7 @@ import os
 from urlparse import urljoin
 
 from flask import Flask
-# from flask_cache import Cache
+from flask_caching import Cache
 from pyjade.ext.jinja import PyJadeExtension
 
 from app.initializers import settings
@@ -28,6 +28,11 @@ def register_blueprints(app):
 	from app.controllers import loadControllers
 	loadControllers(app)
 
+
+
+
+cache = Cache(config={'CACHE_TYPE': 'simple'})
+config={'CACHE_TYPE': 'simple', "CACHE_DEFAULT_TIMEOUT": 300}
 
 
 
@@ -75,6 +80,8 @@ def create_app(debug):
 
 
 	#Markdown(app)              # doesn't work anymore!!!
+
+	cache.init_app(app)
 
 	return app
 

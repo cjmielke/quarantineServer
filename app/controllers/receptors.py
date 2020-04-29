@@ -7,6 +7,7 @@ from ipaddress import ip_address
 from sqlalchemy import text
 
 from app.controllers import add_blueprint, jobsTable, JobsRowFormatter
+from app.core import cache
 from app.initializers.settings import ALL_RECEPTORS, DOCKING_ALGOS, QUARANTINE_FILES
 from app.models import db
 from app.util import safer
@@ -51,8 +52,13 @@ def getJobCount(receptorName):
 
 
 
+add_blueprint(bp)
+
+
+
 
 @bp.route('/<receptorName>/')
+@cache.cached(timeout=60)
 def showReceptor(receptorName):
 
 	if receptorName not in ALL_RECEPTORS: return 'No receptor with this definition', 404
@@ -114,8 +120,3 @@ def showReceptor(receptorName):
 
 
 	return render_template('receptor.html.jade', receptorName=receptorName, md=md, mymd=converted, ALL=ALL, FDA=FDA, jobCount=count)
-
-
-
-
-add_blueprint(bp)
