@@ -25,9 +25,11 @@ To fetch the docked poses, we have prepared a tar archive
     tar -xvzf poses.tar.gz
 
 
+## Running the main server locally
 
+This repo is only useful for developers. Also see the [Client codebase](https://github.com/cjmielke/quarantineAtHome)
 
-This repo is only useful for developers. After cloning, create a secrets.py file at app/initializers/secrets.py
+After cloning, create a secrets.py file at app/initializers/secrets.py
 
     MYSQL_PASSWORD='its a secret'
     SECRET_KEY='somerandom1oi3n10i81203fi82eifn'
