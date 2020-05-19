@@ -9,7 +9,30 @@ This repo is only useful for developers. After cloning, create a secrets.py file
 To run : 
 
     ./runserver -debug
-  
+
+### Obtaining the raw data from the main server
+
+You can obtain a full SQL dump from the production server at these two links. It is missing a few extra-large tables, and has the IP addresses trimmed from the jobs table. (See createDB.sh in this repo)
+
+See the flatfiles at [https://quarantine.infino.me/static/](https://quarantine.infino.me/static/)
+
+To import the sql database into your own private MySQL server :
+
+    wget https://quarantine.infino.me/static/quarantineJobs.sql.bz2
+    wget https://quarantine.infino.me/static/quarantine.sql.bz2
+    bunzip *.bz2
+    mysql -u root -p[yourpass] -e 'create schema quarantine;'
+    mysql -u root -p[yourpass] quarantine < quarantineJobs.sql
+    mysql -u root -p[yourpass] quarantine < quarantine.sql
+
+To fetch the docked poses, we have prepared a tar archive
+    cd quarantine
+    wget https://quarantine.infino.me/static/poses.tar.gz
+    tar -xvzf poses.tar.gz
+    
+
+Then move those two folders into the local static/ folder of your webserver
+
 
 ### Todo
 - [ ] import subset'ed tranches into sql and assign them preferrentially
@@ -26,14 +49,12 @@ To run :
 
 
 
-##### Running in developer mode locally
+##### Running in developer mode locally with a SQLLite database
 
     python2.7 runserver.py
 
 
-##### Running in production
-
-
+##### Running in production with MySQL
 
 for production use, you must install the relevant mysql libraries
 
