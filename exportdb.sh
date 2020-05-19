@@ -12,8 +12,16 @@ mysql -u root -p$1 -e "update quarantinepublic.jobs set ip=NULL;"
 mysqldump -u root -p$1 quarantinepublic > quarantineJobs.sql
 mysql -u root -p$1 -e "drop table quarantinepublic.jobs;"
 
+bzip2 *.sql
 
-#bzip2 *.sql
+mv quarantine.sql.bz2 app/static/
+mv quarantineJobs.sql.bz2 app/static/
+
+# package up the poses
+tar -h --exclude='*.dlg.gz' -czvf poses.tar.gz app/static/results
+mv poses.tar.gz app/static/
+
+
 #rm quarantine.sql
 #rm quarantineJobs.sql
 
