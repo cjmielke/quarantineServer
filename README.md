@@ -26,22 +26,21 @@ To import the sql database into your own private MySQL server :
     mysql -u root -p[yourpass] quarantine < quarantine.sql
 
 To fetch the docked poses, we have prepared a tar archive
-    cd quarantine
+
+    cd quarantineServer # or wherever else you pulled this repository
     wget https://quarantine.infino.me/static/poses.tar.gz
     tar -xvzf poses.tar.gz
     
 
-Then move those two folders into the local static/ folder of your webserver
-
 
 ### Todo
-- [ ] import subset'ed tranches into sql and assign them preferrentially
-- [ ] expose ligand metadata in frontend
+- [x] import subset'ed tranches into sql and assign them preferrentially
+- [x] expose ligand metadata in frontend
 - [ ] results viz improvements - template and JS configs
-- [ ] SMILES rendering
-- [ ] query caching https://flask-caching.readthedocs.io/en/latest/
+- [x] SMILES rendering
+- [x] query caching https://flask-caching.readthedocs.io/en/latest/
 - [ ] stats page with common queries and caching 
-- [ ] work on data exports - need to find best way to remove ip address column : https://stackoverflow.com/questions/15264597/how-to-take-mysql-dump-of-selected-columns-of-a-table
+- [x] work on data exports - need to find best way to remove ip address column : https://stackoverflow.com/questions/15264597/how-to-take-mysql-dump-of-selected-columns-of-a-table
 
 - [ ] more indexes for sql schema
 
