@@ -1,4 +1,4 @@
-Server for the [https://quarantine.infino.me/](Quarantine@Home project)
+Server for the [Quarantine@Home](https://quarantine.infino.me/) Project. 
 
 # quarantineServer
 Central job coordination server for quarantineAtHome project. This is implemented as a simple https API with a sql backend for now. Jobs are handed out sequentially for the time being, but later versions will implement a proper system for prioritizing more important computational needs.
