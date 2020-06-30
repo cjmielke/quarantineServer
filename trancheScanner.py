@@ -1,10 +1,12 @@
 #!/usr/bin/python2.7
 import argparse
+import glob
 import gzip
 import os
 import sys
 
 from sqlalchemy import text
+from tqdm import tqdm
 
 from app.initializers.settings import LOCAL_ZINC
 from app.models import db
@@ -26,7 +28,9 @@ parser.add_argument('-scan', action='store_true')
 parser.add_argument('-load', action='store_true')
 parser.add_argument('-special', action='store_true')
 parser.add_argument('-fetch', action='store_true')
+parser.add_argument('-scanAllTranches', action='store_true')
 parser.add_argument('-build', type=str)
+parser.add_argument('-buildAll', type=str)
 args = parser.parse_args()
 
 debug = True
@@ -246,36 +250,55 @@ def fetchImportantTranches():
 		query = text('select * from InManTranches join tranches USING(trancheName) order by numDrugs desc;')
 		handleQuery(query)
 
-def assembleSpecialTranche(subset='fda'):
+
+SCANPATH = '/data/ZINC/files.docking.org/'
+
+
+def assembleSpecialTranche(subset='fda', allTranches=False):
 	from app.core import create_app
 	app = create_app(debug=debug)
 	with app.app_context():
-		query = text('select zincID from zincToSubset join zincSubsets using(subset)where subsetName=:subset;')
+		if subset=='chembl':
+			query = text('select * from chembl2zinc;')
+		else:
+			query = text('''select zincID from zincToSubset
+				join zincSubsets using(subset)
+				where subsetName=:subset
+			;''')
 		rows = db.engine.execute(query, subset=subset)
 		zincIDs = set([r.zincID for r in rows])
 		print 'Number of zincIDs to find : ', len(zincIDs)
 
+
+
 		# now parse the tranches sequentially
-		query = text('''
-			select trancheName, urlPath, count(*) as numDrugs
-			from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset)
-			JOIN tranches using(trancheName)
-			where subsetName=:subset
-			group by trancheName
-			order by numDrugs desc
-		;''')
-		rows = db.engine.execute(query, subset=subset)
-		tranches = []
+		if allTranches:
+			#query = text('''select * from tranches where subset='3D';''')
+			gg = glob.iglob(SCANPATH + '*/*/*/*.pdbqt.gz')
+			paths = [fp.replace(SCANPATH,'') for fp in gg]
+		else:
+			query = text('''
+				select trancheName, urlPath, count(*) as numDrugs
+				from zincLigands join zincToSubset using(zincID) join zincSubsets using(subset)
+				JOIN tranches using(trancheName)
+				where subsetName=:subset
+				group by trancheName
+				order by numDrugs desc
+			;''')
+			rows = db.engine.execute(query, subset=subset)
+			paths = [r.urlPath for r in rows]
 
 		outTranche = gzip.open('%s_special.pdbqt.gz' % subset, 'w')
 
 		hitNum = 0
 
-		for row in rows:
-			tranches.append(row.urlPath)
+		for urlPath in tqdm(paths):
 			#if row.numDrugs<WEEDS: break
 
-			TR = TrancheReader(0, row.urlPath, localCache=DOWNLOAD_PATH)
+			try: TR = TrancheReader(0, urlPath, localCache=DOWNLOAD_PATH)
+			except Exception as e:
+				print e.message
+				continue
 			modelNum = 1
 			while True:
 				try: zincID, model = TR.getModel(modelNum)
@@ -283,7 +306,7 @@ def assembleSpecialTranche(subset='fda'):
 				zincID = int(zincID.replace('ZINC',''))
 				modelNum+=1
 				if zincID in zincIDs:
-					print 'Found ', zincID
+					#print 'Found ', zincID
 					hitNum += 1
 					outTranche.write('MODEL        %s\n' % str(hitNum))
 					outTranche.write(model)
@@ -293,6 +316,47 @@ def assembleSpecialTranche(subset='fda'):
 		outTranche.close()
 
 		print 'Found %s out of %s ligands' % (hitNum, len(zincIDs))
+
+
+
+def scanAllTranches():
+	'''Scan all 3D trancheFiles and write the ligands discovered to a txt file, for later import into SQL'''
+	from app.core import create_app
+	app = create_app(debug=debug)
+
+	outFile = open('trancheMappings.txt', 'w')
+
+	class FastTrancheReader(TrancheReader):
+		def download(self): return # newp!
+		def scan(self, outFile, fileID):
+			lines = []
+			for line in self.fh:
+				if line.startswith('REMARK') and 'Name' in line:
+					zincID = line.replace('REMARK', '').replace('Name', '').replace('=', '').strip()
+					zincID = int(zincID.replace('ZINC', ''))
+					#outFile.write('%s\t%s\n' % (str(zincID), fileID))
+					lines.append('%s\t%s' % (str(zincID), fileID))
+			outFile.write('\n'.join(lines)+'\n')
+
+	with app.app_context():
+		# get trancheFiles and their integer IDs
+		query = text('SELECT * FROM trancheFiles;')
+		trancheFiles = db.engine.execute(query)
+		trancheFiles = [tf for tf in trancheFiles]
+
+		for trancheFile in tqdm(trancheFiles):
+			if trancheFile.fileID<42818: continue
+			try:
+				TR = FastTrancheReader(0, trancheFile.urlPath, localCache=DOWNLOAD_PATH)
+				TR.scan(outFile, trancheFile.fileID)
+			except Exception as e:
+				print e.message
+				#raise
+
+			#outFile.flush()
+	outFile.flush()
+	outFile.close()
+
 
 
 if __name__ == "__main__":
@@ -308,6 +372,9 @@ if __name__ == "__main__":
 	if args.fetch: fetchImportantTranches()
 
 	if args.build: assembleSpecialTranche(subset=args.build)
+	if args.buildAll: assembleSpecialTranche(subset=args.buildAll, allTranches=True)
+
+	if args.scanAllTranches: scanAllTranches()
 
 	if not args.load or args.scan:
 		print 'need a command'

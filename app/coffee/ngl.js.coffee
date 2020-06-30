@@ -22,11 +22,11 @@ loadPoseTrajectory = (stage, mol) ->
 			mode: 'loop'				# either "loop" or "once"
 			direction: 'bounce')		# either "forward", "backward" or "bounce"
 		console.log 'trajframes', Math.min(traj.frameCount,2)
-		player.play()
+		#player.play()
 		document.posePlayer = player
-		o.addRepresentation 'ball+stick', color: 'partialCharge'
-		#o.addRepresentation 'licorice'
-		#o.addRepresentation 'spacefill', opacity: 0.6
+		o.addRepresentation 'ball+stick'#, color: 'partialCharge'
+		o.addRepresentation 'licorice'
+		#o.addRepresentation 'spacefill', opacity: 0.8
 		#o.autoView()
 		return
 
@@ -35,6 +35,41 @@ loadPoseTrajectory = (stage, mol) ->
 
 
 #loadReceptor('mpro-1')
+
+
+loadChainA = (receptor) ->
+	stage = document.stage
+	#stage.removeAllComponents()
+	# Code for example: interactive/annotation
+	mol='/static/receptors/'+receptor+'/chainA.pdb'
+	stage.loadFile(mol).then (o) ->
+		#o.addRepresentation 'cartoon', color: 'sstruc'
+		o.addRepresentation 'cartoon', color: 'residueindex', opacity: 0.5, sele: ":A and 25-60"
+		#o.addRepresentation 'spacefill', color: 'residueindex', opacity: 0.5
+		#o.addRepresentation 'surface', color: 'resname', opacity: 0.5, sele: ":A and 30-46"
+		o.addRepresentation "licorice", { sele: ":A and (38 353)" }
+
+		chainData =
+			'A':
+				text: 'Human ACE2 Receptor'
+				color: 'firebrick'
+
+		ap = o.structure.getAtomProxy()
+
+		fun = (cp) ->
+			if cp.index==7
+				console.log cp
+				ap.index = cp.atomOffset + Math.floor(cp.atomCount / 2)
+				elm = document.createElement('div')
+				elm.innerText = chainData[cp.chainname].text
+				elm.style.color = 'black'
+				elm.style.backgroundColor = chainData[cp.chainname].color
+				elm.style.padding = '8px'
+				o.addAnnotation ap.positionToVector3(), elm
+			return
+		o.structure.eachChain (fun), new (NGL.Selection)('polymer')
+
+
 
 
 loadDockingResults = (receptor, trajectory) ->
@@ -47,13 +82,16 @@ loadDockingResults = (receptor, trajectory) ->
 		o.addRepresentation 'cartoon', color: 'residueindex'
 		#o.addRepresentation 'cartoon', defaultRepresentation: true
 		#o.addRepresentation 'spacefill', color: 'resname', opacity: 0.5
-		o.addRepresentation 'surface', color: 'resname', opacity: 0.5
+		o.addRepresentation 'surface', color: 'resname'#, opacity: 0.5
 		#o.addRepresentation 'surface', color: 'chain', opacity: 0.4
 		#o.addRepresentation 'cartoon'
+
+		if receptor.includes('spike') then loadChainA(receptor)
 
 		#loadPose()
 		loadPoseTrajectory(stage, trajectory)
 		root.setReceptorOrientation receptor, stage
+
 
 
 #$(document).ready ->

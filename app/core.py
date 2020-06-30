@@ -16,8 +16,6 @@ from app.models import db
 # from app.auth import loginManagerSetup
 
 app = Flask('quarantine', static_folder=settings.STATIC_FOLDER, template_folder=settings.TEMPLATE_FOLDER)
-app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
-app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
 
 # Caching
@@ -52,6 +50,8 @@ def create_app(debug):
 		from app.initializers import secrets
 		MYSQL_HOST = os.getenv('MYSQL_HOST') or 'localhost'
 		db_uri = 'mysql://%s:%s@%s/%s' % (settings.MYSQL_USER, secrets.MYSQL_PASSWORD, MYSQL_HOST, settings.MYSQL_DB)
+		app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+		app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
 	app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 	#app.secret_key = SECRET_KEY  # move this out of here eventually
