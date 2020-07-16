@@ -101,10 +101,12 @@ html
 					transition: all 2s ease-in-out;
 					z-index: 9999999999;
 				}
-			#floater
-				a(href="https://www.patreon.com/bePatron?u=34783353" data-patreon-widget-type="become-patron-button")
-					Become a Patron!
-			<script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+
+			-if not DEBUG
+				#floater
+					a(href="https://www.patreon.com/bePatron?u=34783353" data-patreon-widget-type="become-patron-button")
+						Become a Patron!
+				<script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
 
 
 

@@ -83,14 +83,20 @@ def create_app(debug):
 
 	cache.init_app(app)
 
+	# Make some variables globally available to all templates
+	@app.context_processor
+	def inject_vars():
+		return dict(
+			ALL_RECEPTORS=ALL_RECEPTORS,
+			DEBUG=debug
+		)
+
 	return app
 
 
 
-# Make some variables globally available to all templates
-@app.context_processor
-def inject_vars():
-	return dict(
-		ALL_RECEPTORS=ALL_RECEPTORS
-	)
+
+
+
+
 
