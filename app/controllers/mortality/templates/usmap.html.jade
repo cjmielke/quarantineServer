@@ -1,0 +1,223 @@
+extends base.html.jade
+//extends layout/base.html.jade
+
+
+
+
+block title
+	title COVID Mortality Visualization
+
+//need to disable, since it has too many errors and crashes browser
+block sentry
+
+
+block openGraph
+	meta(property='og:image', content='https://www.infino.me/static/img/screenshots/wonder.png')
+	meta(property='og:url', content='https://www.infino.me/mortality/usmap')
+	meta(property='og:image:width', content='1600')
+	meta(property='og:image:height', content='1200')
+
+	meta(property='og:title', content='Visualization of USA Deaths by State')
+	meta(name='description', content='USA mortality data provided by the CDC')
+
+	meta(name='twitter:card', content='photo')
+	meta(name='twitter:title', content='Top causes of death')
+	meta(name='twitter:site', content='@InfinoMe')
+	meta(name='twitter:url', content='https://www.infino.me/mortality/usmap')
+	meta(name='twitter:image', content='https://www.infino.me/static/img/screenshots/wonder-twitter4.png')
+
+
+
+block content
+
+	ul
+		li by-age by-sex
+		li response mobility epidemiology hospitalizations
+
+
+	script(src="static/js/d3.js")
+	script(src="static/js/crossfilter.js")
+	script(src="static/js/dc.js")
+	script(src="static/js/colorbrewer.js")
+
+	//script(src="static/js/")
+
+	link(rel="stylesheet", type="text/css", href="static/dc.css")
+
+
+	.body-wrapper
+		.container
+
+			#usa-mortality
+
+			style.
+
+				.container-fluid.viz { width:95%; padding: 0px; }
+				.row {
+					margin: 0;
+					padding: 0;
+					width: 100%;
+				}
+
+
+				h1 {
+					margin-top: 0;
+					padding: 0;
+				}
+
+				#loading {
+					/*position: absolute;
+					top: 300px;
+					left: calc(50% - 50px);
+					color: #333;*/
+					font-size: 100px;
+					display: none;
+				}
+				#mobile {display: none;}
+				.viz { display: none; }
+
+				.col-md-10 {
+					padding: 0;
+				}
+				.dc-chart g.row text {fill: black;}
+				.dc-chart g.pie-slice text {fill: black;}
+				.countries {
+					stroke: #777;
+					stroke-width: 1px;
+				}
+
+				#data-size .dc-data-count {
+					float: right;
+					margin: 0;
+					margin-top: 8px;
+				}
+
+				#dragHint {
+					position: absolute;
+					left: 300px;
+					top: 20%;
+					z-index: -10;
+				}
+
+				#dragHint img {
+					max-height: 50px;
+				}
+
+		.container#mobile
+			.row
+				center
+					h3 Sorry. This mighty Vis cannot possibly manifest on a mere handheld device!
+					h4 Go to a desktop computer, and you'll see something like this :
+					br
+					img(src='https://www.infino.me/static/img/screenshots/wonder.png', style='width:100%;')
+
+
+		.container#loading
+			.row(style='height: 300px;')
+				center
+					h1 Visualization is loading ....
+					i.fa.fa-cog.fa-spin
+
+
+
+		.container-fluid.viz
+
+
+
+			.row
+				#us-chart.col-lg-8.col-md-8.col-sm-12.col-xs-12
+					center
+						strong Click on a state to filter
+
+				#icd-chapter.col-lg-4.col-md-4.col-sm-12.col-xs-12
+					center
+						p
+							strong Disease Type
+							| (Click to filter)
+							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+					.clearfix
+
+
+			.row
+
+				#timeseries-chart.col-md-12.col-sm-12.col-xs-12
+					#dragHint
+						img(src='static/drag.svg')
+						p Drag to filter by time
+					center
+						p
+							strong Age of Death
+							| (Drag to filter)
+						span.reset(style='display: none;')
+							a.reset(href='javascript:ageHistogram.filterAll();dc.redrawAll();', style='display: none;') reset
+					.clearfix
+
+			.row
+				h1 Leaderboards
+			.row
+				#leaderboard-tested.col-lg-3.col-md-3.col-sm-3.col-xs-3
+					center
+						p
+							strong Total tested
+							| (Click to filter)
+							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+					.clearfix
+
+				#leaderboard-confirmed.col-lg-3.col-md-3.col-sm-3.col-xs-3
+					center
+						p
+							strong Positive Rate
+							| (Click to filter)
+							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+					.clearfix
+
+				#leaderboard-dead.col-lg-3.col-md-3.col-sm-3.col-xs-3
+					center
+						p
+							strong Total dead
+							| (Click to filter)
+							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+					.clearfix
+
+
+			hr
+
+
+
+			br
+			br
+
+			.row.well(style='padding:10px;')
+				.col-md-8
+					p Click on states, or causes of death to filter the dataset.
+						| You can also drag on the bar and line charts to filter by age of death or year.
+						| States are colored by the fraction of all deaths
+						b for that state.
+				.col-md-4
+					p Data Source:
+						a(target='_BLANK',href='https://github.com/open-covid-19/data') Open-COVID19-Data
+
+
+
+			.row
+				.col-md-9#bubble-chart
+			.row
+				.col-md-6#ageTimeseries
+
+			.row
+
+				center
+					#gender-chart.col-md-3.col-sm-2.col-xs-6
+						br
+						strong Gender
+
+				.col-md-1
+
+
+		br
+		.title-block.clearfix
+			.title-seperator
+		br
+
+
+
