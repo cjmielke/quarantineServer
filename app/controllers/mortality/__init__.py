@@ -8,7 +8,7 @@ bp = Blueprint('mortality', __name__, url_prefix='/mortality', template_folder='
 
 register_coffeeScript('controllers/mortality/coffee/init.js.coffee')
 register_coffeeScript('controllers/mortality/coffee/deathStats.js.coffee')
-register_coffeeScript('controllers/mortality/coffee/whoMortality.js.coffee')
+#register_coffeeScript('controllers/mortality/coffee/whoMortality.js.coffee')
 
 
 
