@@ -15,7 +15,7 @@ def loadControllers(app):
 	from app.controllers.api import v1
 	from app.controllers import ngl
 	from app.controllers import client, users, receptors, job
-	from app.controllers import mortality
+	from app.controllers import viz
 
 	for blueprint in _blueprints:
 		app.register_blueprint(blueprint)

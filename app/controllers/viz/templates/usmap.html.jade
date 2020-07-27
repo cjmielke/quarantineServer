@@ -132,7 +132,7 @@ block content
 				#icd-chapter.col-lg-4.col-md-4.col-sm-12.col-xs-12
 					center
 						p
-							strong Disease Type
+							strong Most Deaths
 							| (Click to filter)
 							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
 					.clearfix
@@ -146,10 +146,10 @@ block content
 						p Drag to filter by time
 					center
 						p
-							strong Age of Death
+							strong Date
 							| (Drag to filter)
 						span.reset(style='display: none;')
-							a.reset(href='javascript:ageHistogram.filterAll();dc.redrawAll();', style='display: none;') reset
+							a.reset(href='javascript:timeSeriesPlot.filterAll();dc.redrawAll();', style='display: none;') reset
 					.clearfix
 
 			.row
@@ -160,7 +160,7 @@ block content
 						p
 							strong Total tested
 							| (Click to filter)
-							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+							a.reset(href='javascript:ldbdTested.filterAll();dc.redrawAll();', style='display: none;') reset
 					.clearfix
 
 				#leaderboard-confirmed.col-lg-3.col-md-3.col-sm-3.col-xs-3
@@ -168,7 +168,7 @@ block content
 						p
 							strong Positive Rate
 							| (Click to filter)
-							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+							a.reset(href='javascript:ldbdConfirmed.filterAll();dc.redrawAll();', style='display: none;') reset
 					.clearfix
 
 				#leaderboard-dead.col-lg-3.col-md-3.col-sm-3.col-xs-3
@@ -176,7 +176,7 @@ block content
 						p
 							strong Total dead
 							| (Click to filter)
-							a.reset(href='javascript:chapterChart.filterAll();dc.redrawAll();', style='display: none;') reset
+							a.reset(href='javascript:ldbdDead.filterAll();dc.redrawAll();', style='display: none;') reset
 					.clearfix
 
 
