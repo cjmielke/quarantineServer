@@ -437,7 +437,6 @@ $(document).ready ->
 			#d.deaths = +d.deaths
 			d.deaths = +d.new_deceased
 			total_deceased += d.deaths
-			#d.stateID = stateIDs[d.state]
 			#if d.stateID==undefined then return
 			#d.age = parseInt(d.age,16)
 
