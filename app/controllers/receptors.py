@@ -37,6 +37,7 @@ def index():
 	return render_template('receptors.html.jade', mymd=converted)
 
 
+@cache.memoize(60*60*24)
 def getJobCount(receptorName):
 	query = text('''
 		select count(*) from jobs
