@@ -58,7 +58,7 @@ add_blueprint(bp)
 
 
 @bp.route('/<receptorName>/')
-@cache.cached(timeout=60*3)
+@cache.cached()
 def showReceptor(receptorName):
 
 	if receptorName not in ALL_RECEPTORS: return 'No receptor with this definition', 404

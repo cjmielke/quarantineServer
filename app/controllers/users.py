@@ -3,7 +3,7 @@ from random import shuffle
 from flask import Blueprint, render_template, request
 from ipaddress import ip_address
 from sqlalchemy import text
-
+from app.core import cache
 from app.controllers import add_blueprint, jobsTable
 from app.initializers.settings import ALL_RECEPTORS, DOCKING_ALGOS
 from app.models import db
@@ -16,6 +16,7 @@ bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('/')
+@cache.cached()
 def index():
 
 	# FIXME - this is eventually going to get slow - and will need to be replaced with a cronjob
@@ -70,6 +71,7 @@ def index():
 
 
 @bp.route('/<int:userID>/')
+@cache.cached(timeout=60*5)
 def showUser(userID):
 
 	query = text('''

@@ -29,8 +29,9 @@ def register_blueprints(app):
 
 
 
-cache = Cache(config={'CACHE_TYPE': 'simple'})
-config={'CACHE_TYPE': 'simple', "CACHE_DEFAULT_TIMEOUT": 300}
+#cache = Cache(config={'CACHE_TYPE': 'simple'})
+cache = Cache(config={'CACHE_TYPE': 'filesystem', 'CACHE_DIR': '/tmp'})
+config={'CACHE_TYPE': 'simple', "CACHE_DEFAULT_TIMEOUT": 60*60*24}
 
 
 
